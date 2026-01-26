@@ -1,0 +1,366 @@
+@charset "UTF-8";
+
+/* --- Reset Básico --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: #fff;
+    color: #333;
+}
+
+/* --- Header / Nav --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: white;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header a {
+    text-decoration: none;
+}
+
+.logo-icon img {
+    width: 30px;
+}
+
+.logo-text {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: -1px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+nav a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px 30px 40px;
+}
+
+.btn-icon {
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #333;
+    transition: background 0.2s;
+}
+
+.btn-icon:hover {
+    background-color: #e0e0e0;
+}
+
+.toolbar-right {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* --- Menu Dropdown de Opções --- */
+
+.options-wrapper {
+    position: relative;
+}
+
+.point-text {
+    width: 200px;
+}
+
+.options-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background-color: #fff;
+    min-width: 180px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    padding: 10px 0;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+
+/* Classe que será ativada pelo JS */
+.options-menu.show {
+    display: block;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.menu-item {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 0.95rem;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s;
+}
+
+.menu-item i {
+    color: #666;
+    width: 20px;
+    text-align: center;
+}
+
+.menu-item:hover {
+    background-color: #f3f3f3;
+}
+
+.menu-item:hover i {
+    color: #000;
+}
+
+/* Pequena animação para ficar suave */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Barra de Pesquisa */
+.search-container {
+    position: relative;
+    width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: #f3f3f3;
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+}
+
+/* --- Div do Mapa --- */
+.map-wrapper {
+    padding: 0 40px 40px 40px;
+    height: calc(100vh - 180px);
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+
+@media (max-width: 768px) {
+    header { flex-direction: column; gap: 15px; padding: 20px; }
+    nav ul { gap: 15px; flex-wrap: wrap; justify-content: center; }
+    .toolbar { flex-direction: column; gap: 15px; padding: 10px 20px; }
+    .search-container { width: 100%; }
+    .toolbar-right { width: 100%; justify-content: space-between; }
+    .map-wrapper { padding: 0 20px 20px 20px; }
+}
+
+/* --- Modal Flutuante --- */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    pointer-events: auto;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.modal-input {
+    background-color: #f3f3f3;
+    width: 100%;
+}
+
+.row-inputs {
+    display: flex;
+    gap: 15px;
+}
+
+.instruction-text {
+    font-size: 0.85rem;
+    color: #1a73e8;
+    margin-bottom: 20px;
+    background-color: #e8f0fe;
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+#btn-save {
+    background-color: rgba(13, 134, 50, 0.712);
+}
+
+#btn-save:hover {
+    background-color: rgb(13, 134, 49);
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+div.action-buttons {
+    width: 160px;
+}
+
+.view-btn {
+    display: inline;
+}
+
+.edit-btn {
+    display: inline;
+}
+
+.delete-btn {
+    display: inline;
+    background-color: rgba(255, 38, 0, 0.281);
+}
+
+.delete-btn:hover {
+    display: inline;
+    background-color: rgba(255, 38, 0, 0.603);
+}
+
+.btn-primary {
+    background-color: #333;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #000;
+}
+
+.btn-secondary {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background-color: #ccc;
+}
