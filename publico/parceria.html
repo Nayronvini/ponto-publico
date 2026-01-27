@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Público - Solicitar Parceria</title>
+
+    <link rel="shortcut icon" href="_imagens/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="_styles/style.css">
+    <link rel="stylesheet" href="_styles/parceria.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <img src="_imagens/logo.png" alt="Logo Ponto Público">
+                </div>
+                <div class="logo-text">Ponto Público</div>
+            </div>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="login.html">Meu Perfil</a></li>
+                <li><a href="parceria.html" class="active">Solicitar Parceria</a></li>
+                <li><a href="services.html">Sugerir Serviço</a></li>
+                <li><a href="#">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="partnership-container">
+
+        <div class="content-header">
+            <a href="index.html" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <h1>Solicitar Parceria como ONG</h1>
+        </div>
+
+        <form class="partnership-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="ong-name">Nome da ONG:</label>
+                    <input type="text" id="ong-name" class="form-input" placeholder="Nome de ONG">
+                </div>
+
+                <div class="form-group">
+                    <label for="ong-email">E-mail:</label>
+                    <input type="email" id="ong-email" class="form-input" placeholder="example@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="ong-cnpj">CNPJ da ONG:</label>
+                    <input type="text" id="ong-cnpj" class="form-input" placeholder="12.345.678/0001-90">
+                </div>
+
+                <div class="form-group">
+                    <label for="ong-social">Rede Social:</label>
+                    <input type="text" id="ong-social" class="form-input" placeholder="Opcional">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">SOLICITAR</button>
+            </div>
+        </form>
+    </main>
+
+</body>
+
+</html>

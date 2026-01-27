@@ -1,0 +1,234 @@
+/* --- Container Principal --- */
+
+.services-container {
+    padding: 20px 40px;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+
+/* --- Toolbar Superior --- */
+
+.top-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.btn-icon-square {
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    transition: background 0.2s;
+    text-decoration: none;
+    /* Caso seja link <a> */
+}
+
+.btn-icon-square:hover {
+    background-color: #e0e0e0;
+    color: #000;
+}
+
+.search-wrapper {
+    display: flex;
+    gap: 15px;
+    flex-grow: 1;
+    justify-content: flex-end;
+    margin-left: 20px;
+}
+
+.search-bar-large {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-bar-large input {
+    width: 100%;
+    height: 50px;
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 8px;
+    padding: 0 50px 0 20px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-bar-large .search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: #000;
+    font-weight: bold;
+}
+
+
+/* --- Tabela / Lista --- */
+
+
+/* Configuração das Colunas (Grid System) */
+
+.col-service {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.col-local {
+    flex: 1;
+    color: #555;
+}
+
+.col-rating {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+/* Cabeçalho da Tabela */
+
+.list-header-row {
+    display: flex;
+    align-items: center;
+    border: 2px solid #000;
+    border-radius: 8px;
+    padding: 12px 25px;
+    background-color: #f3f3f3;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.list-header-row .col-rating {
+    justify-content: center;
+    /* Centralizado no cabeçalho conforme imagem */
+}
+
+
+/* Item da Lista */
+
+.service-item {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    /* Para o border radius funcionar com filhos */
+}
+
+.item-summary {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    background-color: #f3f3f3;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.item-summary:hover {
+    background-color: #e9e9e9;
+}
+
+.item-summary .col-service span {
+    font-size: 1.1rem;
+    color: #444;
+}
+
+
+/* Ícone da Seta */
+
+.arrow-icon {
+    font-size: 1rem;
+    color: #333;
+    transition: transform 0.3s ease;
+}
+
+
+/* Estrelas */
+
+.stars {
+    font-size: 1.2rem;
+    gap: 5px;
+}
+
+.stars .yellow {
+    color: #e8d817;
+}
+
+
+/* Amarelo aproximado da imagem */
+
+.stars .gray {
+    color: #dcdcdc;
+}
+
+
+/* Área de Detalhes (Acordeão) */
+
+.item-details {
+    max-height: 0;
+    overflow: hidden;
+    background-color: #efefef;
+    /* Um pouco mais escuro que o item */
+    transition: max-height 0.3s ease-out, padding 0.3s;
+    padding: 0 25px;
+}
+
+.item-details p {
+    color: #666;
+    margin: 0;
+}
+
+
+/* --- Estado Ativo (Aberto) --- */
+
+.service-item.active .arrow-icon {
+    transform: rotate(90deg);
+    /* Gira a seta para baixo */
+}
+
+.service-item.active .item-details {
+    max-height: 200px;
+    /* Altura suficiente para o conteúdo */
+    padding: 20px 25px;
+}
+
+
+/* Responsividade Básica */
+
+@media (max-width: 768px) {
+    .list-header-row {
+        display: none;
+    }
+    /* Esconde cabeçalho em mobile */
+    .top-toolbar {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    .search-wrapper {
+        margin: 0;
+    }
+    .item-summary {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .col-service {
+        width: 100%;
+        flex: none;
+    }
+    .col-local {
+        font-size: 0.9rem;
+    }
+}

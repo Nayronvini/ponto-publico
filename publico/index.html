@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,20 @@
 
     <!-- O favicon da página -->
     <link rel="shortcut icon" href="_imagens/logo.png" type="image/x-icon">
-    
+
     <!-- Esse link puxa a fonte do Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
+
     <!-- Outro cara de fonte -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Agora esse aqui é o Leaflet (vamos usá-lo junto do OpenStreetMap do Google) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
     <!-- O css padrão baseado no modelo que fizemos no Figma -->
     <link rel="stylesheet" href="_styles/style.css">
 </head>
+
 <body>
 
     <!-- A parte do cabeçalho -->
@@ -37,9 +39,9 @@
         <!-- O menu que vamos usar mais tarde (coloquei para adiantar logo) -->
         <nav>
             <ul>
-                <li><a href="#">Meu Perfil</a></li>
-                <li><a href="#">Solicitar Parceria</a></li>
-                <li><a href="#">Sugerir Serviço</a></li>
+                <li><a href="login.html">Meu Perfil</a></li>
+                <li><a href="parceria.html">Solicitar Parceria</a></li>
+                <li><a href="services.html">Sugerir Serviço</a></li>
                 <li><a href="#">Sair</a></li>
             </ul>
         </nav>
@@ -51,7 +53,7 @@
         <!-- Aqui fica o menu de opções (Não fiz funcionar) -->
         <div class="toolbar-left">
             <div class="options-wrapper">
-                <button class="btn-icon"  id="btn-options">
+                <button class="btn-icon" id="btn-options">
                     <i class="fa-solid fa-list"></i>
                 </button>
 
@@ -71,7 +73,7 @@
                     <h3>Salvar Localização</h3>
                     <button id="btn-close-modal" class="btn-close">&times;</button>
                 </div>
-                
+
                 <form id="form-point">
                     <div class="input-group">
                         <label for="input-name">Nome do Local</label>
@@ -103,7 +105,7 @@
 
         <!-- Aqui é o botão de adicionar locais -->
         <div class="toolbar-right">
-                <button class="btn-icon" id="point-add">
+            <button class="btn-icon" id="point-add">
                     <i class="fa-solid fa-plus"></i>
                 </button>
 
@@ -124,8 +126,9 @@
 
     <!-- Aqui chamamos a o Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
+
     <!-- Aqui é o script na pasta de _scripts -->
     <script src="_scripts/script.js"></script>
 </body>
+
 </html>

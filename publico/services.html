@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Público - Serviços e Avaliações</title>
+
+    <link rel="shortcut icon" href="_imagens/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="_styles/style.css">
+    <link rel="stylesheet" href="_styles/services.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <img src="_imagens/logo.png" alt="Logo">
+                </div>
+                <div class="logo-text">Ponto Público</div>
+            </div>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="login.html">Meu Perfil</a></li>
+                <li><a href="parceria.html">Solicitar Parceria</a></li>
+                <li><a href="services.html">Sugerir Serviço</a></li>
+                <li><a href="#">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="services-container">
+
+        <div class="top-toolbar">
+            <a href="index.html" class="btn-icon-square" title="Ver no Mapa">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </a>
+
+            <div class="search-wrapper">
+                <button class="btn-icon-square" title="Filtros">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
+
+                <div class="search-bar-large">
+                    <input type="text" placeholder="Pesquisar...">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-header-row">
+            <div class="col-service">Serviço</div>
+            <div class="col-local">Local</div>
+            <div class="col-rating">Avaliação</div>
+        </div>
+
+        <div class="services-list" id="services-list">
+
+            <div class="service-item">
+                <div class="item-summary" onclick="toggleDetails(this)">
+                    <div class="col-service">
+                        <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                        <span>Emissão de RG</span>
+                    </div>
+                    <div class="col-local">Cajazeiras - PB</div>
+                    <div class="col-rating stars">
+                        <i class="fa-solid fa-star yellow"></i>
+                        <i class="fa-solid fa-star yellow"></i>
+                        <i class="fa-solid fa-star yellow"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                    </div>
+                </div>
+                <div class="item-details">
+                    <p>Descrição do serviço de emissão de RG. Horário de funcionamento: 08:00 às 14:00.</p>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="item-summary" onclick="toggleDetails(this)">
+                    <div class="col-service">
+                        <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                        <span>Posto de Saúde</span>
+                    </div>
+                    <div class="col-local">Cajazeiras - PB</div>
+                    <div class="col-rating stars">
+                        <i class="fa-solid fa-star yellow"></i>
+                        <i class="fa-solid fa-star yellow"></i>
+                        <i class="fa-solid fa-star yellow"></i>
+                        <i class="fa-solid fa-star yellow"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                    </div>
+                </div>
+                <div class="item-details">
+                    <p>Atendimento médico básico e vacinação.</p>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="item-summary" onclick="toggleDetails(this)">
+                    <div class="col-service">
+                        <i class="fa-solid fa-chevron-right arrow-icon"></i> <span>Ponto de Ônibus</span>
+                    </div>
+                    <div class="col-local">Cajazeiras - PB</div>
+                    <div class="col-rating stars">
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                    </div>
+                </div>
+                <div class="item-details">
+                    <p>Ponto de ônibus próximo a saida</p>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="item-summary" onclick="toggleDetails(this)">
+                    <div class="col-service">
+                        <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                        <span>Delegacia</span>
+                    </div>
+                    <div class="col-local">Cajazeiras - PB</div>
+                    <div class="col-rating stars">
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                        <i class="fa-solid fa-star gray"></i>
+                    </div>
+                </div>
+                <div class="item-details">
+                    <p>Plantão 24 horas.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="_scripts/services.js"></script>
+</body>
+
+</html>

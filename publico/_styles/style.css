@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 /* --- Reset Básico --- */
+
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +14,9 @@ body {
     color: #333;
 }
 
+
 /* --- Header / Nav --- */
+
 header {
     display: flex;
     justify-content: space-between;
@@ -61,7 +64,6 @@ nav a:hover {
     text-decoration: underline;
 }
 
-
 .toolbar {
     display: flex;
     justify-content: space-between;
@@ -94,6 +96,7 @@ nav a:hover {
     align-items: center;
 }
 
+
 /* --- Menu Dropdown de Opções --- */
 
 .options-wrapper {
@@ -112,7 +115,7 @@ nav a:hover {
     background-color: #fff;
     min-width: 180px;
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     padding: 10px 0;
     z-index: 1000;
     overflow: hidden;
@@ -120,6 +123,7 @@ nav a:hover {
 
 
 /* Classe que será ativada pelo JS */
+
 .options-menu.show {
     display: block;
     animation: fadeIn 0.2s ease-in-out;
@@ -154,13 +158,23 @@ nav a:hover {
     color: #000;
 }
 
+
 /* Pequena animação para ficar suave */
+
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
+
 /* Barra de Pesquisa */
+
 .search-container {
     position: relative;
     width: 400px;
@@ -189,7 +203,9 @@ nav a:hover {
     cursor: pointer;
 }
 
+
 /* --- Div do Mapa --- */
+
 .map-wrapper {
     padding: 0 40px 40px 40px;
     height: calc(100vh - 180px);
@@ -202,15 +218,34 @@ nav a:hover {
     z-index: 1;
 }
 
-
 @media (max-width: 768px) {
-    header { flex-direction: column; gap: 15px; padding: 20px; }
-    nav ul { gap: 15px; flex-wrap: wrap; justify-content: center; }
-    .toolbar { flex-direction: column; gap: 15px; padding: 10px 20px; }
-    .search-container { width: 100%; }
-    .toolbar-right { width: 100%; justify-content: space-between; }
-    .map-wrapper { padding: 0 20px 20px 20px; }
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+    nav ul {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .toolbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px 20px;
+    }
+    .search-container {
+        width: 100%;
+    }
+    .toolbar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .map-wrapper {
+        padding: 0 20px 20px 20px;
+    }
 }
+
 
 /* --- Modal Flutuante --- */
 
@@ -237,14 +272,20 @@ nav a:hover {
     max-width: 400px;
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     pointer-events: auto;
     animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .modal-header {
@@ -315,7 +356,8 @@ nav a:hover {
     background-color: rgb(13, 134, 49);
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
     padding: 12px 24px;
     border-radius: 8px;
     border: none;

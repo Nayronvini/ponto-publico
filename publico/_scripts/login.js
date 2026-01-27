@@ -1,0 +1,66 @@
+// Elementos das abas
+const tabLogin = document.getElementById('tab-login');
+const tabRegister = document.getElementById('tab-register');
+const formLogin = document.getElementById('form-login');
+const formRegister = document.getElementById('form-register');
+
+// Alternar para Login
+tabLogin.addEventListener('click', () => {
+    tabLogin.classList.add('active');
+    tabRegister.classList.remove('active');
+
+    formLogin.classList.add('active');
+    formRegister.classList.remove('active');
+});
+
+// Alternar para Cadastro
+tabRegister.addEventListener('click', () => {
+    tabRegister.classList.add('active');
+    tabLogin.classList.remove('active');
+
+    formRegister.classList.add('active');
+    formLogin.classList.remove('active');
+});
+
+// Ver senha (apenas visual, ícone do olho)
+const togglePass = document.getElementById('toggle-login-pass');
+const inputPass = document.getElementById('login-pass');
+
+if (togglePass) {
+    togglePass.addEventListener('click', () => {
+        // Alterna o tipo do input
+        const type = inputPass.getAttribute('type') === 'password' ? 'text' : 'password';
+        inputPass.setAttribute('type', type);
+
+        // Alterna o ícone
+        togglePass.classList.toggle('fa-eye');
+        togglePass.classList.toggle('fa-eye-slash');
+    });
+}
+
+// Simulação de envio do Login
+formLogin.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+
+    // Aqui você conectaria com o backend futuramente
+    alert(`Bem-vindo de volta, ${email}! Redirecionando...`);
+    window.location.href = "index.html"; // Vai para o mapa
+});
+
+// Simulação de envio do Cadastro
+formRegister.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nome = document.getElementById('reg-name').value;
+    const senha = document.getElementById('reg-pass').value;
+    const confirm = document.getElementById('reg-confirm').value;
+
+    if (senha !== confirm) {
+        alert("As senhas não coincidem!");
+        return;
+    }
+
+    alert(`Conta criada com sucesso para ${nome}!`);
+    // Poderia redirecionar para o login ou direto para o mapa
+    window.location.href = "index.html";
+});

@@ -1,0 +1,200 @@
+/* --- Estilos da Página de Login --- */
+
+.auth-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #e8f0fe;
+    /* Um azul bem clarinho para diferenciar do mapa */
+    padding: 20px;
+}
+
+.auth-card {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header .logo-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.auth-header h2 {
+    font-size: 1.8rem;
+    color: #333;
+    font-weight: 900;
+}
+
+.auth-header p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+
+/* Abas de Navegação */
+
+.auth-tabs {
+    display: flex;
+    border-bottom: 2px solid #f3f3f3;
+    margin-bottom: 25px;
+}
+
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #999;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    color: #0d8632;
+    /* Verde do seu tema */
+    border-bottom: 2px solid #0d8632;
+    font-weight: 700;
+}
+
+
+/* Formulários */
+
+.auth-form {
+    display: none;
+    /* Oculto por padrão */
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-form.active {
+    display: flex;
+    animation: slideUp 0.3s ease-out;
+}
+
+
+/* Input Wrapper para ícones */
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.input-wrapper .show-pass {
+    left: auto;
+    right: 15px;
+    cursor: pointer;
+}
+
+.input-wrapper .show-pass:hover {
+    color: #333;
+}
+
+
+/* Ajuste nos inputs existentes para dar espaço ao ícone */
+
+.modal-input {
+    padding-left: 40px !important;
+    /* Espaço para o ícone */
+    height: 45px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: border 0.2s;
+}
+
+.modal-input:focus {
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+
+/* Botões e Links */
+
+.btn-full {
+    width: 100%;
+    margin-top: 10px;
+    padding: 14px;
+    background-color: rgba(13, 134, 50, 0.85);
+    /* Verde Ponto Público */
+    font-size: 1.1rem;
+}
+
+.btn-full:hover {
+    background-color: rgb(13, 134, 49);
+}
+
+.form-footer {
+    text-align: right;
+    font-size: 0.85rem;
+    margin-top: -5px;
+}
+
+.forgot-pass {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.forgot-pass:hover {
+    text-decoration: underline;
+}
+
+.back-link {
+    margin-top: 20px;
+}
+
+.back-link a {
+    color: #666;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.back-link a:hover {
+    color: #333;
+}
+
+
+/* Animações */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 25px;
+    }
+}
