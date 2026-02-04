@@ -75,18 +75,43 @@ try {
 });
 
 // Simulação de envio do Cadastro
-formRegister.addEventListener('submit', (e) => {
+formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // 1. Pegar os dados do HTML
     const nome = document.getElementById('reg-name').value;
+    const email = document.getElementById('reg-email').value;
     const senha = document.getElementById('reg-pass').value;
     const confirm = document.getElementById('reg-confirm').value;
 
+    // 2. Validação simples no Front
     if (senha !== confirm) {
         alert("As senhas não coincidem!");
         return;
     }
 
-    alert(`Conta criada com sucesso para ${nome}!`);
-    // Poderia redirecionar para o login ou direto para o mapa
-    window.location.href = "login.html";
+    try {
+        // 3. Enviar para o Backend (AQUI ESTÁ A MÁGICA)
+        // Se estiver usando Live Server (sem a pasta public), use 'http://localhost:3000/api/auth/register'
+        const response = await fetch('http://localhost:3000/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome, email, senha })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Conta criada com sucesso! Agora faça login.");
+            
+            // Troca automaticamente para a aba de Login para facilitar
+            document.getElementById('tab-login').click(); 
+        } else {
+            alert("Erro ao cadastrar: " + (data.error || "Tente novamente"));
+        }
+
+    } catch (error) {
+        console.error("Erro:", error);
+        alert("Erro de conexão ao tentar cadastrar.");
+    }
 });

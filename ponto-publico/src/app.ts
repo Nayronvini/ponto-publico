@@ -15,10 +15,10 @@ connectMongo()
 // Middlewares
 app.use(cors())
 app.use(express.json())
-app.use("/api/auth", authRoutes)
 
 // Rotas
 app.use("/api/pontos", pontoPublicoRoutes)
+app.use("/api/auth", authRoutes)
 
 // Iniciar Servidor
 const PORT = process.env.PORT || 3000
