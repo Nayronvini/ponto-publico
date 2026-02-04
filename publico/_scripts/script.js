@@ -200,6 +200,18 @@ map.on('click', function(e) {
 document.getElementById('form-point').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // Recupera o token do localStorage
+
+    const token = localStorage.getItem('token');
+
+    // Verificação de segurança no front
+
+    if (!token) {
+        alert("Você precisa estar logado para realizar esta ação!");
+        window.location.href = "login.html"; // Redireciona para login
+        return;
+    }
+
     const dados = {
         nome: inputName.value,
         latitude: parseFloat(inputLat.value),
@@ -218,14 +230,14 @@ document.getElementById('form-point').addEventListener('submit', async (e) => {
             // --- MODO EDIÇÃO (PUT) ---
             response = await fetch(`${API_URL}/${idPontoEdicao}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, // <--- ADICIONADO AQUI
                 body: JSON.stringify(dados)
             });
         } else {
             // --- MODO CRIAÇÃO (POST) ---
             response = await fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, // <--- ADICIONADO AQUI
                 body: JSON.stringify(dados)
             });
         }
@@ -235,8 +247,14 @@ document.getElementById('form-point').addEventListener('submit', async (e) => {
             closeModal();
             carregarPontos(); // Recarrega a lista e o mapa
         } else {
-            const erro = await response.json();
-            alert("Erro ao salvar: " + JSON.stringify(erro));
+            // Se o token expirou ou é inválido, o backend retorna 401
+            if (response.status === 401) {
+                alert("Sua sessão expirou. Faça login novamente.");
+                window.location.href = "login.html";
+            } else {
+                const erro = await response.json();
+                alert("Erro ao salvar: " + JSON.stringify(erro));
+            }
         }
 
     } catch (error) {

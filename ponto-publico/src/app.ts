@@ -6,6 +6,7 @@ import express from "express"
 import cors from "cors"
 import pontoPublicoRoutes from "./routes/pontoPublicoRoutes"
 import { connectMongo } from "./config/mongo"
+import authRoutes from "./routes/authRoutes" // Importe a rota
 
 const app = express()
 
@@ -14,6 +15,7 @@ connectMongo()
 // Middlewares
 app.use(cors())
 app.use(express.json())
+app.use("/api/auth", authRoutes)
 
 // Rotas
 app.use("/api/pontos", pontoPublicoRoutes)

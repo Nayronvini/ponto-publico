@@ -39,13 +39,39 @@ if (togglePass) {
 }
 
 // Simulação de envio do Login
-formLogin.addEventListener('submit', (e) => {
+formLogin.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
+    const senha = document.getElementById('login-pass').value;
 
     // Aqui você conectaria com o backend futuramente
-    alert(`Bem-vindo de volta, ${email}! Redirecionando...`);
-    window.location.href = "index.html"; // Vai para o mapa
+    // alert(`Bem-vindo de volta, ${email}! Redirecionando...`);
+    // window.location.href = "index.html"; // Vai para o mapa
+try {
+        const response = await fetch('http://localhost:3000/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, senha })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // SALVA O TOKEN NO NAVEGADOR
+            localStorage.setItem('token', data.token);
+            
+            // (Opcional) Salvar dados do usuário para mostrar "Olá, Fulano" depois
+            localStorage.setItem('user', JSON.stringify(data.user)); 
+
+            alert("Login realizado com sucesso!");
+            window.location.href = "index.html";
+        } else {
+            alert("Erro: " + (data.error || "Falha no login"));
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Erro de conexão com o servidor.");
+    }
 });
 
 // Simulação de envio do Cadastro
