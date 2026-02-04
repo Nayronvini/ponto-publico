@@ -44,9 +44,6 @@ formLogin.addEventListener('submit', async (e) => {
     const email = document.getElementById('login-email').value;
     const senha = document.getElementById('login-pass').value;
 
-    // Aqui você conectaria com o backend futuramente
-    // alert(`Bem-vindo de volta, ${email}! Redirecionando...`);
-    // window.location.href = "index.html"; // Vai para o mapa
 try {
         const response = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
@@ -60,7 +57,6 @@ try {
             // SALVA O TOKEN NO NAVEGADOR
             localStorage.setItem('token', data.token);
             
-            // (Opcional) Salvar dados do usuário para mostrar "Olá, Fulano" depois
             localStorage.setItem('user', JSON.stringify(data.user)); 
 
             alert("Login realizado com sucesso!");
@@ -78,21 +74,19 @@ try {
 formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 1. Pegar os dados do HTML
+    // Pega os dados do HTML
     const nome = document.getElementById('reg-name').value;
     const email = document.getElementById('reg-email').value;
     const senha = document.getElementById('reg-pass').value;
     const confirm = document.getElementById('reg-confirm').value;
 
-    // 2. Validação simples no Front
+    // Validação simples no Front
     if (senha !== confirm) {
         alert("As senhas não coincidem!");
         return;
     }
 
     try {
-        // 3. Enviar para o Backend (AQUI ESTÁ A MÁGICA)
-        // Se estiver usando Live Server (sem a pasta public), use 'http://localhost:3000/api/auth/register'
         const response = await fetch('http://localhost:3000/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

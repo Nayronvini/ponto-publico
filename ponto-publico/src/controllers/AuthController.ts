@@ -51,14 +51,6 @@ const AuthController = {
     try {
       // Busca usuário
       const usuario = await UserModel.findByEmail(email)
-      // --- LOG PARA VER SE ACHOU O USUÁRIO ---
-      if (!usuario) {
-          console.log("❌ Erro: Usuário não encontrado no banco.");
-          return res.status(401).json({ error: "Credenciais inválidas (User)" })
-      }
-      console.log("✅ Usuário encontrado:", usuario.nome);
-      console.log("Hash no banco:", usuario.senha_hash);
-      // ---------------------------------------
 
       if (!usuario) {
         return res.status(401).json({ error: "Credenciais inválidas" })
@@ -66,13 +58,7 @@ const AuthController = {
 
       // Compara a senha enviada com o hash no banco
       const senhaValida = await bcrypt.compare(senha, usuario.senha_hash)
-      // --- LOG PARA VER SE A SENHA BATE ---
-      if (!senhaValida) {
-          console.log("❌ Erro: Senha incorreta.");
-          return res.status(401).json({ error: "Credenciais inválidas (Pass)" })
-      }
-      console.log("✅ Senha correta! Gerando token...");
-      // ------------------------------------
+
       if (!senhaValida) {
         return res.status(401).json({ error: "Credenciais inválidas" })
       }
