@@ -88,5 +88,5 @@ formRegister.addEventListener('submit', (e) => {
 
     alert(`Conta criada com sucesso para ${nome}!`);
     // Poderia redirecionar para o login ou direto para o mapa
-    window.location.href = "index.html";
+    window.location.href = "login.html";
 });
