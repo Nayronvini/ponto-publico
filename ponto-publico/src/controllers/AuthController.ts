@@ -40,14 +40,6 @@ const AuthController = {
   async login(req: Request, res: Response) {
     const { email, senha } = req.body
 
-    // --- ADICIONE ESSES LOGS AQUI ---
-    console.log("--- TENTATIVA DE LOGIN ---");
-    console.log("Email recebido:", email);
-    console.log("Senha recebida:", senha); 
-    // --------------------------------
-
-    
-
     try {
       // Busca usuário
       const usuario = await UserModel.findByEmail(email)
