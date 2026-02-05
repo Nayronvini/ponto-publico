@@ -60,67 +60,45 @@
             </div>
         </aside>
 
-        <section class="profile-content">
+<section class="profile-content">
             
             <div class="content-header">
                 <h3>Minhas avaliações</h3>
             </div>
 
-            <div class="reviews-list">
-
-                <div class="review-card">
-                    <div class="card-header">
-                        <span class="reviewer-name">
-                            <i class="fa-solid fa-circle-user"></i> Alberto.Grangeiro
-                        </span>
-                        <div class="review-meta">
-                            <span class="review-date">2 ano atrás</span>
-                            <div class="stars">
-                                <i class="fa-solid fa-star yellow"></i>
-                                <i class="fa-solid fa-star gray"></i>
-                                <i class="fa-solid fa-star gray"></i>
-                                <i class="fa-solid fa-star gray"></i>
-                                <i class="fa-solid fa-star gray"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <p>Caro</p>
-                    </div>
-
-                    <div class="card-footer">
-                        <span class="service-tag">Emissão de RG</span>
-                    </div>
-                </div>
-
-                <div class="review-card">
-                    <div class="card-header">
-                        <span class="reviewer-name">
-                            <i class="fa-solid fa-circle-user"></i> Alberto.Grangeiro
-                        </span>
-                        <div class="review-meta">
-                            <span class="review-date">1 mês atrás</span>
-                            <div class="stars">
-                                <i class="fa-solid fa-star yellow"></i>
-                                <i class="fa-solid fa-star yellow"></i>
-                                <i class="fa-solid fa-star yellow"></i>
-                                <i class="fa-solid fa-star yellow"></i>
-                                <i class="fa-solid fa-star yellow"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <p>Atendimento rápido e eficiente.</p>
-                    </div>
-
-                    <div class="card-footer">
-                        <span class="service-tag">Posto de Saúde</span>
-                    </div>
-                </div>
-
+            <div class="reviews-list" id="lista-minhas-avaliacoes">
+                <p>Carregando...</p>
             </div>
+        </section>
+
+    </main>
+
+    <div id="modal-edit-review" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Avaliação</h3>
+                <button id="btn-close-edit" class="btn-close">&times;</button>
+            </div>
+            <form id="form-edit-review">
+                <input type="hidden" id="edit-review-id">
+                
+                <div class="input-group">
+                    <label>Nota (1 a 5):</label>
+                    <input type="number" id="edit-nota" class="modal-input" min="1" max="5" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Comentário:</label>
+                    <textarea id="edit-comentario" class="modal-input" rows="3" required></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="btn-cancel-edit" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
         </section>
     </main>
     

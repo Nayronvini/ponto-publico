@@ -7,6 +7,7 @@ import cors from "cors"
 import pontoPublicoRoutes from "./routes/pontoPublicoRoutes"
 import { connectMongo } from "./config/mongo"
 import authRoutes from "./routes/authRoutes" // Importe a rota
+import avaliacaoRoutes from "./routes/avaliacaoRoutes" 
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }))
 // Rotas
 app.use("/api/pontos", pontoPublicoRoutes)
 app.use("/api/auth", authRoutes)
+app.use("/api/avaliacoes", avaliacaoRoutes)
 
 // Iniciar Servidor
 const PORT = process.env.PORT || 3000

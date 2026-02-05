@@ -143,4 +143,160 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = "login.html";
             });
         }
+        // ... (Código anterior de carregar foto e nome) ...
+
+    // ----------------------------------------------------
+    // LÓGICA DAS AVALIAÇÕES (CRUD)
+    // ----------------------------------------------------
+    
+    carregarMinhasAvaliacoes();
+
+    async function carregarMinhasAvaliacoes() {
+        const container = document.getElementById('lista-minhas-avaliacoes');
+        const token = localStorage.getItem('token');
+        
+        if(!token) return;
+
+        try {
+            const response = await fetch('http://localhost:3000/api/avaliacoes/usuario/meus-reviews', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const avaliacoes = await response.json();
+
+            container.innerHTML = '';
+
+            if(avaliacoes.length === 0) {
+                container.innerHTML = '<p>Você ainda não avaliou nenhum local.</p>';
+                return;
+            }
+
+            avaliacoes.forEach(av => {
+                // Nome do ponto (se foi populado corretamente)
+                const nomePonto = av.pontoId ? av.pontoId.nome : 'Local desconhecido';
+                
+                // Criação do HTML do card
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="reviewer-name">
+                            <i class="fa-solid fa-map-pin"></i> ${nomePonto}
+                        </span>
+                        <div class="review-meta">
+                            <span class="review-date">${new Date(av.createdAt).toLocaleDateString()}</span>
+                            <div class="stars">
+                                ${gerarEstrelasHTML(av.nota)}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p>${av.comentario}</p>
+                    </div>
+
+                    <div class="card-footer" style="justify-content: flex-end; gap: 10px;">
+                        <button class="btn-text" style="color: blue;" onclick="abrirModalEdicao('${av._id}', '${av.nota}', '${av.comentario.replace(/'/g, "\\'")}')">Editar</button>
+                        <button class="btn-text" style="color: red;" onclick="excluirAvaliacao('${av._id}')">Excluir</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error(error);
+            container.innerHTML = '<p>Erro ao carregar avaliações.</p>';
+        }
+    }
+
+    // Função auxiliar de estrelas (pode copiar a do services.js ou criar essa simples)
+    function gerarEstrelasHTML(nota) {
+        let html = '';
+        for(let i=1; i<=5; i++) {
+            html += `<i class="fa-solid fa-star ${i <= nota ? 'yellow' : 'gray'}"></i>`;
+        }
+        return html;
+    }
+
+    // --- FUNÇÕES DE EDIÇÃO E EXCLUSÃO (Globais para funcionar no onclick) ---
+
+    window.excluirAvaliacao = async (id) => {
+        if(!confirm("Tem certeza que deseja apagar essa avaliação?")) return;
+        
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch(`http://localhost:3000/api/avaliacoes/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if(res.ok) {
+                alert("Avaliação removida!");
+                // Recarrega a lista
+                location.reload(); 
+            } else {
+                alert("Erro ao remover.");
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    // Variáveis do Modal
+    const modalEdit = document.getElementById('modal-edit-review');
+    const inputId = document.getElementById('edit-review-id');
+    const inputNota = document.getElementById('edit-nota');
+    const inputComentario = document.getElementById('edit-comentario');
+    const btnCloseEdit = document.getElementById('btn-close-edit');
+    const btnCancelEdit = document.getElementById('btn-cancel-edit');
+    const formEdit = document.getElementById('form-edit-review');
+
+    window.abrirModalEdicao = (id, nota, texto) => {
+        inputId.value = id;
+        inputNota.value = nota;
+        inputComentario.value = texto;
+        modalEdit.classList.remove('hidden');
+    };
+
+    const fecharModal = () => {
+        modalEdit.classList.add('hidden');
+    };
+
+    if(btnCloseEdit) btnCloseEdit.addEventListener('click', fecharModal);
+    if(btnCancelEdit) btnCancelEdit.addEventListener('click', fecharModal);
+
+    // Salvar Edição
+    if(formEdit) {
+        formEdit.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem('token');
+            const id = inputId.value;
+            
+            const dados = {
+                nota: Number(inputNota.value),
+                comentario: inputComentario.value
+            };
+
+            try {
+                const res = await fetch(`http://localhost:3000/api/avaliacoes/${id}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                if(res.ok) {
+                    alert("Avaliação atualizada!");
+                    fecharModal();
+                    // Recarrega a lista para mostrar o novo texto
+                    location.reload(); 
+                    // Ou poderia chamar carregarMinhasAvaliacoes(), mas reload é mais seguro para limpar tudo
+                } else {
+                    alert("Erro ao atualizar.");
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    }
     });

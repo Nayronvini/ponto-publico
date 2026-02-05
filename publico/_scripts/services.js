@@ -45,18 +45,13 @@ function renderizarListaServicos(pontos) {
         const item = document.createElement('div');
         item.className = 'service-item';
         
-        // --- PARTE CRUCIAL (Garante que o ID do HTML seja igual ao da URL) ---
-        // Pega o ID (seja _id do Mongo ou id simples)
         const idReal = ponto._id || ponto.id; 
-        
-        // Cria a etiqueta no HTML. Ex: id="service-6983..."
         item.id = `service-${idReal}`; 
-        // ---------------------------------------------------------------------
 
         const temLocalizacao = ponto.latitude && ponto.longitude;
 
         item.innerHTML = `
-            <div class="item-summary" onclick="toggleDetails(this)">
+            <div class="item-summary" onclick="toggleDetails(this, '${idReal}')">
                 <div class="col-service">
                     <i class="fa-solid fa-chevron-right arrow-icon"></i>
                     <span>${ponto.nome}</span>
@@ -67,15 +62,29 @@ function renderizarListaServicos(pontos) {
                 </div>
             </div>
             <div class="item-details">
-                <p><strong>Descrição:</strong> ${ponto.descricao || 'Sem descrição.'}</p>
-                <p><strong>Horário:</strong> ${ponto.horario_funcionamento || 'Não informado'}</p>
-                <p><strong>Telefone:</strong> ${ponto.telefone || 'Não informado'}</p>
-                
-                ${temLocalizacao ? `
-                    <button class="btn-ver-mapa" onclick="irParaMapa(${ponto.latitude}, ${ponto.longitude})">
-                        <i class="fa-solid fa-map-location-dot"></i> Ver no Mapa
-                    </button>
-                ` : ''}
+                <div class="details-content">
+                    <p><strong>Descrição:</strong> ${ponto.descricao || 'Sem descrição.'}</p>
+                    <p><strong>Horário:</strong> ${ponto.horario_funcionamento || 'Não informado'}</p>
+                    <p><strong>Telefone:</strong> ${ponto.telefone || 'Não informado'}</p>
+                    
+                    <div class="actions-row" style="margin-top: 15px; display:flex; gap: 10px;">
+                         ${temLocalizacao ? `
+                            <button class="btn-ver-mapa" onclick="irParaMapa(${ponto.latitude}, ${ponto.longitude})">
+                                <i class="fa-solid fa-map-location-dot"></i> Ver no Mapa
+                            </button>
+                        ` : ''}
+
+                        <button class="btn-ver-mapa" style="background-color: #0d8632;" onclick="irParaAvaliacao('${idReal}', '${ponto.nome}')">
+                            <i class="fa-solid fa-star"></i> AVALIAR
+                        </button>
+                    </div>
+
+                    <div class="reviews-section" id="reviews-${idReal}" style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 10px;">
+                        <h4>Avaliações de usuários</h4>
+                        <div class="loading-reviews">Carregando avaliações...</div>
+                        <div class="reviews-list-content"></div>
+                    </div>
+                </div>
             </div>
         `;
         container.appendChild(item);
@@ -235,4 +244,87 @@ function tentarFocar(idElemento) {
         return true;
     }
     return false;
+}
+
+// Função para ir para a página de avaliar
+function irParaAvaliacao(id, nome) {
+    // Codifica o nome para passar na URL sem quebrar
+    const nomeEncoded = encodeURIComponent(nome);
+    window.location.href = `avaliar.html?id=${id}&nome=${nomeEncoded}`;
+}
+
+// Atualizar a função toggleDetails para carregar as avaliações quando abrir
+async function toggleDetails(element, pontoId) {
+    const item = element.parentElement;
+    const isActive = item.classList.contains('active');
+    
+    // Toggle da classe
+    item.classList.toggle('active');
+
+    // Se acabou de abrir, carrega as avaliações
+    if (!isActive) {
+        await carregarAvaliacoesDoPonto(pontoId);
+    }
+
+    // Fecha os outros (Opcional)
+    const allItems = document.querySelectorAll('.service-item');
+    allItems.forEach(other => {
+        if (other !== item) {
+            other.classList.remove('active');
+        }
+    });
+}
+
+// Função que busca as avaliações no backend
+async function carregarAvaliacoesDoPonto(pontoId) {
+    const divReviews = document.querySelector(`#reviews-${pontoId} .reviews-list-content`);
+    const divLoading = document.querySelector(`#reviews-${pontoId} .loading-reviews`);
+    
+    if(!divReviews) return;
+
+    try {
+        console.log("Buscando avaliações para o ID:", pontoId); // LOG 1
+
+        const response = await fetch(`http://localhost:3000/api/avaliacoes/${pontoId}`);
+        const avaliacoes = await response.json();
+
+        console.log("Avaliações recebidas:", avaliacoes); // LOG 2
+
+        divLoading.style.display = 'none';
+        divReviews.innerHTML = '';
+
+        if (avaliacoes.length === 0) {
+            divReviews.innerHTML = '<p style="font-size: 0.9rem; color: #777;">Ainda não há avaliações. Seja o primeiro!</p>';
+            return;
+        }
+
+        avaliacoes.forEach(av => {
+            // Tenta pegar a foto, se não tiver usa null
+            const userFoto = av.userId && av.userId.foto ? av.userId.foto : null;
+            // Tenta pegar o nome, se o usuário foi deletado ou deu erro, põe Anônimo
+            const userName = av.userId ? av.userId.nome : 'Usuário Anônimo';
+            
+            const htmlReview = `
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <strong style="font-size: 0.95rem; display:flex; align-items:center; gap:8px; color: #333;">
+                            ${userFoto ? 
+                                `<img src="${userFoto}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">` : 
+                                `<div style="width:30px; height:30px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-user" style="color:#fff; font-size:14px;"></i></div>`
+                            } 
+                            ${userName}
+                        </strong>
+                        <div class="stars" style="font-size: 0.8rem;">${renderStars(av.nota)}</div>
+                    </div>
+                    <p style="font-size: 1rem; color: #555; margin: 0; line-height: 1.4;">${av.comentario}</p>
+                    <small style="color: #bbb; font-size: 0.75rem; display:block; margin-top:5px;">${new Date(av.createdAt).toLocaleDateString()}</small>
+                </div>
+            `;
+            divReviews.innerHTML += htmlReview;
+        });
+
+    } catch (error) {
+        console.error("Erro ao carregar reviews", error);
+        divLoading.textContent = "Erro ao carregar.";
+    }
 }

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliar Local - Ponto Público</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="_styles/style.css">
+    <style>
+        /* CSS Inline específico desta página */
+        .rating-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .star-widget {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            direction: rtl; /* Truque para selecionar as estrelas anteriores ao hover */
+        }
+        .star-widget input { display: none; }
+        .star-widget label {
+            font-size: 40px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        /* Lógica das estrelas: Hover e Checked */
+        .star-widget input:checked ~ label,
+        .star-widget label:hover,
+        .star-widget label:hover ~ label {
+            color: #fd4;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+        .local-info { margin-bottom: 30px; }
+        .local-info h2 { margin-bottom: 10px; }
+        .local-info p { color: #666; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon"><img src="_imagens/logo.png"></div>
+            <div class="logo-text">Ponto Público</div>
+        </div>
+        <nav>
+            <ul><li><a href="services.html">Voltar para Serviços</a></li></ul>
+        </nav>
+    </header>
+
+    <div class="rating-container">
+        <div class="local-info">
+            <h2 id="nome-local">Carregando...</h2>
+            <p>Conte sua experiência neste local.</p>
+        </div>
+
+        <form id="form-avaliacao">
+            <div class="star-widget">
+                <input type="radio" name="rate" id="rate-5" value="5">
+                <label for="rate-5" class="fa-solid fa-star"></label>
+
+                <input type="radio" name="rate" id="rate-4" value="4">
+                <label for="rate-4" class="fa-solid fa-star"></label>
+
+                <input type="radio" name="rate" id="rate-3" value="3">
+                <label for="rate-3" class="fa-solid fa-star"></label>
+
+                <input type="radio" name="rate" id="rate-2" value="2">
+                <label for="rate-2" class="fa-solid fa-star"></label>
+
+                <input type="radio" name="rate" id="rate-1" value="1">
+                <label for="rate-1" class="fa-solid fa-star"></label>
+            </div>
+
+            <div class="input-group">
+                <textarea id="comentario" rows="5" placeholder="Escreva seu comentário aqui..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%;">ENVIAR AVALIAÇÃO</button>
+        </form>
+    </div>
+
+    <script>
+        // Script simples embutido para controlar essa página
+        const params = new URLSearchParams(window.location.search);
+        const pontoId = params.get('id');
+        const nomePonto = params.get('nome');
+
+        // Preenche o nome do local
+        if(nomePonto) document.getElementById('nome-local').textContent = decodeURIComponent(nomePonto);
+
+        document.getElementById('form-avaliacao').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const token = localStorage.getItem('token');
+            if(!token) {
+                alert("Você precisa estar logado para avaliar!");
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Pega qual estrela foi marcada
+            const checkedStar = document.querySelector('input[name="rate"]:checked');
+            if(!checkedStar) return alert("Selecione uma nota de 1 a 5 estrelas.");
+
+            const dados = {
+                pontoId: pontoId,
+                nota: Number(checkedStar.value),
+                comentario: document.getElementById('comentario').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/avaliacoes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                if(response.ok) {
+                    alert("Avaliação enviada com sucesso!");
+                    window.location.href = `services.html?id=${pontoId}`; // Volta para o serviço
+                } else {
+                    const err = await response.json();
+                    alert("Erro: " + err.error);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erro de conexão.");
+            }
+        });
+    </script>
+</body>
+</html>
