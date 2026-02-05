@@ -23,7 +23,7 @@ function toggleDetails(element) {
     const item = element.parentElement;
     item.classList.toggle('active');
 
-    // Fechar outros itens
+    // Opcional: Fechar os outros quando abrir um
     const allItems = document.querySelectorAll('.service-item');
     allItems.forEach(other => {
         if (other !== item) {
@@ -34,13 +34,25 @@ function toggleDetails(element) {
 
 // ----------------- Renderizar lista -----------------
 function renderizarListaServicos(pontos) {
-    container.innerHTML = ''; // limpa lista
+    container.innerHTML = ''; 
+
+    if (pontos.length === 0) {
+        container.innerHTML = '<p style="padding:20px; text-align:center;">Nenhum serviço encontrado.</p>';
+        return;
+    }
 
     pontos.forEach(ponto => {
         const item = document.createElement('div');
         item.className = 'service-item';
+        
+        // --- PARTE CRUCIAL (Garante que o ID do HTML seja igual ao da URL) ---
+        // Pega o ID (seja _id do Mongo ou id simples)
+        const idReal = ponto._id || ponto.id; 
+        
+        // Cria a etiqueta no HTML. Ex: id="service-6983..."
+        item.id = `service-${idReal}`; 
+        // ---------------------------------------------------------------------
 
-        // Verifica se tem coordenadas válidas
         const temLocalizacao = ponto.latitude && ponto.longitude;
 
         item.innerHTML = `
@@ -79,10 +91,15 @@ function irParaMapa(lat, lng) {
 // ----------------- Carregar serviços do backend -----------------
 async function carregarLista() {
     try {
-        const response = await fetch('http://localhost:3000/api/pontos'); // ajuste conforme sua rota
+        // Ajuste a URL se estiver usando Live Server
+        const response = await fetch('http://localhost:3000/api/pontos'); 
         todosPontos = await response.json();
 
-        renderizarListaServicos(todosPontos); // exibe todos inicialmente
+        renderizarListaServicos(todosPontos);
+        
+        // Verifica a URL logo depois de desenhar a lista
+        verificarIdNaURL();
+
     } catch (error) {
         console.error('Erro ao carregar serviços:', error);
         container.innerHTML = `<p style="color:red;">Erro ao carregar serviços.</p>`;
@@ -90,14 +107,19 @@ async function carregarLista() {
 }
 
 // ----------------- Filtro de pesquisa -----------------
-searchInput.addEventListener('input', () => {
-    const texto = searchInput.value.toLowerCase();
-    const filtrados = todosPontos.filter(p => p.nome.toLowerCase().includes(texto));
-    renderizarListaServicos(filtrados);
-});
+if (searchInput) {
+    searchInput.addEventListener('input', () => {
+        const texto = searchInput.value.toLowerCase();
+        const filtrados = todosPontos.filter(p => p.nome.toLowerCase().includes(texto));
+        renderizarListaServicos(filtrados);
+    });
+}
 
 // ----------------- Inicialização -----------------
-document.addEventListener('DOMContentLoaded', carregarLista);
+document.addEventListener('DOMContentLoaded', () => {
+    carregarLista();
+    verificarEstadoLogin(); // Chama a função de controle de botões do menu
+});
 
 // Lógica para saber qual botão mostrar (ENTRAR OU SAIR)
 function verificarEstadoLogin() {
@@ -167,4 +189,50 @@ if (btnMeuPerfil) {
         }
         // Se tiver token, o código não faz nada e o link funciona normalmente (vai para profile.html)
     });
+}
+
+// --- DEEP LINKING (Id vindo do Mapa) ---
+// --- DEEP LINKING (Versão com Rastreador) ---
+// --- DEEP LINKING (Rastreador com Logs) ---
+function verificarIdNaURL() {
+    const params = new URLSearchParams(window.location.search);
+    const idUrl = params.get('id');
+
+    if (!idUrl || idUrl === "undefined") {
+        console.log("Nenhum ID válido na URL para buscar.");
+        return;
+    }
+
+    const idAlvo = `service-${idUrl}`;
+    console.log(`🔍 Procurando no HTML pelo elemento: "${idAlvo}"`);
+
+    // Tenta achar imediatamente
+    if (tentarFocar(idAlvo)) return;
+
+    // Se não achou, tenta por mais 4 segundos (caso a internet esteja lenta)
+    let tentativas = 0;
+    const rastreador = setInterval(() => {
+        tentativas++;
+        console.log(`Tentativa ${tentativas}... procurando ${idAlvo}`);
+        
+        if (tentarFocar(idAlvo) || tentativas > 8) {
+            clearInterval(rastreador);
+        }
+    }, 500);
+}
+
+function tentarFocar(idElemento) {
+    const el = document.getElementById(idElemento);
+    if (el) {
+        console.log("✅ ENCONTRADO! Rolando a tela.");
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (!el.classList.contains('active')) el.classList.add('active');
+        
+        // Efeito visual
+        el.style.transition = "background 0.5s";
+        el.style.backgroundColor = "#fffbcc"; 
+        setTimeout(() => { el.style.backgroundColor = ""; }, 2000);
+        return true;
+    }
+    return false;
 }

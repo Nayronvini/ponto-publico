@@ -6,8 +6,27 @@ const inputLat = document.getElementById('input-lat');
 const inputLng = document.getElementById('input-lng');
 const inputName = document.getElementById('input-name');
 
+
 // URL do Backend
 const API_URL = 'http://localhost:3000/api/pontos';
+
+const blueIcon = L.icon({
+    iconUrl: '_imagens/logo.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const greenIcon = L.icon({
+    iconUrl: '_imagens/logo.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
 
 // Variavel para saber se estam criando ou editando
 let idPontoEdicao = null;
@@ -71,16 +90,6 @@ let marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
 
 // Cria o popup que você vê no ponto (aquele que aparece em cima do pino no mapa)
 // Obviamente as informações vão variar comforme o local, mas aí já é backend
-const popupContent = `
-    <div style="font-family: Roboto, sans-serif;">
-        <h3 style="margin: 0; font-size: 16px;">Cajazeiras</h3>
-        <p style="margin: 5px 0; color: #666; font-size: 13px;">Cajazeiras, PB, 58900-000</p>
-        <a href="#" style="color: #1a73e8; text-decoration: none; font-size: 13px;">Ver mapa ampliado</a>
-    </div>
-`;
-
-marker.bindPopup(popupContent).openPopup();
-
 
 const btnOptions = document.getElementById('btn-options');
 const optionsMenu = document.getElementById('options-menu');
@@ -113,33 +122,51 @@ let tempMarker = null;
 
 // Função para abrir o modal
 // Função auxiliar para quando clicar no botão de editar da lista
+// Função chamada ao clicar em "Editar" no popup
 function prepararEdicao(ponto) {
-    idPontoEdicao = ponto.id; // Guarda o ID globalmente
-    
-    inputName.value = ponto.nome;
-    inputLat.value = ponto.latitude;
-    inputLng.value = ponto.longitude;
-    document.getElementById('input-desc').value = ponto.descricao || '';
-    
-    // Se tiver inputs para endereço/descrição, preencha aqui também
-    
-    openModal(true); // Abre o modal em modo edição
+    console.log("Editando ponto:", ponto); // Debug para ver se o dado chegou
+
+    // 1. Salva o ID na variável global para sabermos que é uma EDIÇÃO
+    idPontoEdicao = ponto._id || ponto.id;
+
+    // 2. Preenche os campos básicos (usando as variáveis globais ou getElementById)
+    if (typeof inputName !== 'undefined') inputName.value = ponto.nome;
+    if (typeof inputLat !== 'undefined') inputLat.value = ponto.latitude;
+    if (typeof inputLng !== 'undefined') inputLng.value = ponto.longitude;
+
+    // 3. Preenche a Descrição (Campo novo)
+    const inputDesc = document.getElementById('input-desc');
+    if (inputDesc) {
+        inputDesc.value = ponto.descricao || ''; // Se não tiver descrição, deixa vazio
+    }
+
+    // 4. Muda o título do modal para saber que estamos editando
+    const tituloModal = document.querySelector('#modal-point h2');
+    if (tituloModal) tituloModal.textContent = "Editar Ponto";
+
+    // 5. Abre o modal em modo de edição
+    openModal(true);
 }
 
 // Atualiza sua função openModal existente
 function openModal(editMode = false) {
-    modalPoint.classList.remove('hidden');
-    
-    if (!editMode) {
-        // Se for criar novo, limpa tudo
-        idPontoEdicao = null; // IMPORTANTE: Reseta o ID
-        inputName.value = '';
-        inputDesc.value = '';
-        inputLat.value = '';
-        inputLng.value = '';
+    const modalPoint = document.getElementById('modal-point');
+    const inputDesc = document.getElementById('input-desc');
+    const tituloModal = document.querySelector('#modal-point h2');
+
+    if (modalPoint) {
+        modalPoint.classList.remove('hidden');
         
-        if(tempMarker) {
-            map.removeLayer(tempMarker);
+        // Se NÃO for modo de edição (ou seja, é um Novo Ponto), limpa tudo
+        if (!editMode) {
+            idPontoEdicao = null; // Reseta o ID global
+            
+            if (typeof inputName !== 'undefined') inputName.value = '';
+            if (typeof inputLat !== 'undefined') inputLat.value = '';
+            if (typeof inputLng !== 'undefined') inputLng.value = '';
+            if (inputDesc) inputDesc.value = ''; // Limpa a descrição
+            
+            if (tituloModal) tituloModal.textContent = "Novo Ponto";
         }
     }
 }
@@ -314,17 +341,57 @@ campoPesquisa.addEventListener("input", () => {
     atualizarMarcadores(filtrados);
 });
 
-function atualizarMarcadores(lista) {
-    // remove os marcadores antigos na filtragem
+function atualizarMarcadores(pontos) {
+    // Limpa marcadores antigos
     marcadoresMap.forEach(m => map.removeLayer(m));
     marcadoresMap = [];
 
-    lista.forEach(ponto => {
-        const marker = L.marker([ponto.latitude, ponto.longitude], {icon: customIcon})
-            .addTo(map)
-            .bindPopup(`<b>${ponto.nome}</b><br>${ponto.endereco}`);
-        
-        marcadoresMap.push(marker);
+    pontos.forEach(ponto => {
+        if (ponto.latitude && ponto.longitude) {
+            
+            // --- CORREÇÃO AQUI: Garante o ID (seja _id ou id) ---
+            const idReal = ponto._id || ponto.id;
+
+            if (!idReal) {
+                console.error("ERRO: Ponto sem ID encontrado:", ponto);
+                return; // Pula este ponto se não tiver ID
+            }
+            // ----------------------------------------------------
+
+            // Define ícone (se for seu, senão padrão)
+            const userLogado = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+            const isOwner = userLogado && userLogado.id === ponto.usuario_id; 
+            const iconToUse = isOwner ? greenIcon : blueIcon; 
+
+            const marker = L.marker([ponto.latitude, ponto.longitude], { icon: iconToUse });
+
+            // Conteúdo do Popup usando o 'idReal' que criamos
+            const conteudoPopup = `
+                <div style="text-align:center; min-width: 150px;">
+                    <h3 style="margin:0; font-size:16px;">${ponto.nome}</h3>
+                    <p style="margin:5px 0; font-size:13px; color:#555;">${ponto.descricao || 'Sem descrição'}</p>
+                    
+                    <a href="services.html?id=${idReal}" class="link-popup" style="display:inline-block; margin-bottom:10px;">
+                        Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                    
+                    <div style="border-top: 1px solid #eee; padding-top: 8px;">
+                        <button onclick="prepararEdicaoPeloId('${idReal}')" 
+                                style="cursor:pointer; background:none; border:none; color:#007bff; text-decoration:underline;">
+                            Editar
+                        </button>
+                        <button onclick="deletarPonto('${idReal}')" 
+                                style="cursor:pointer; background:none; border:none; color:red; margin-left:10px;">
+                            Excluir
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            marker.bindPopup(conteudoPopup);
+            marker.addTo(map);
+            marcadoresMap.push(marker);
+        }
     });
 }
 
@@ -493,5 +560,24 @@ function verificarParametrosURL() {
                 markerEncontrado.openPopup();
             }
         }, 500); // Delay de meio segundo
+    }
+}
+
+// --- FUNÇÃO AUXILIAR PARA O POPUP (Versão Corrigida) ---
+function prepararEdicaoPeloId(idClicado) {
+    console.log("Tentando editar ID:", idClicado);
+
+    // Busca flexível: Verifica se o ID bate com _id OU com id
+    const pontoEncontrado = todosPontos.find(p => {
+        const idPonto = p._id || p.id;
+        return idPonto === idClicado;
+    });
+    
+    if (pontoEncontrado) {
+        prepararEdicao(pontoEncontrado);
+    } else {
+        console.error("Erro: ID não encontrado na lista em memória.");
+        // Debug para ajudar a ver o que tem na lista
+        console.log("IDs disponíveis na memória:", todosPontos.map(p => p._id || p.id));
     }
 }
