@@ -58,3 +58,27 @@ if (btnLogout) {
         window.location.href = "login.html";
     });
 }
+
+
+// --- PROTEÇÃO DO BOTÃO MEU PERFIL ---
+const btnMeuPerfil = document.getElementById('btn-meu-perfil');
+
+if (btnMeuPerfil) {
+    btnMeuPerfil.addEventListener('click', (e) => {
+        const token = localStorage.getItem('token');
+
+        // Se não está logado
+        if (!token) {
+            e.preventDefault(); // Impede de ir para profile.html
+            
+            // Opção A: Apenas redireciona para o login
+            // window.location.href = "login.html";
+
+            // Aviso de que não esta lagado
+            if (confirm("Você precisa estar logado para ver seu perfil. Ir para login?")) {
+                window.location.href = "login.html";
+            }
+        }
+        // Se tiver token, o código não faz nada e o link funciona normalmente (vai para profile.html)
+    });
+}
