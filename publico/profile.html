@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Público - Meu Perfil</title>
+
+    <link rel="shortcut icon" href="_imagens/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="_styles/style.css">
+    <link rel="stylesheet" href="_styles/profile.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <img src="_imagens/logo.png" alt="Logo">
+                </div>
+                <div class="logo-text">Ponto Público</div>
+            </div>
+        </a>
+        <nav>
+            <ul>
+                <li>
+                    <a href="admin-users.html" style="font-weight: bold; color: #000;">
+                        <i class="fa-solid fa-users-gear"></i> Administrar Usuários
+                    </a>
+                </li>
+                <li><a href="parceria.html">Solicitar Parceria</a></li>
+                <li><a href="services.html">Sugerir Serviço</a></li>
+                <li><a href="#" id="btn-logout-nav">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="profile-container">
+        
+        <aside class="profile-sidebar">
+            <div class="back-btn-container">
+                <a href="index.html" class="back-link">
+                    <i class="fa-solid fa-arrow-left"></i> Meu Perfil
+                </a>
+            </div>
+
+            <div class="profile-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <h2 class="profile-name" id="display-name">Alberto.Grangeiro</h2>
+
+            <div class="profile-options">
+                <button class="btn-text" id="btn-mudar-foto">Mudar Foto</button>
+                <button class="btn-text" id="btn-mudar-nome">Mudar Nome</button>
+
+                <input type="file" id="input-foto-arquivo" accept="image/*" style="display: none;">
+                
+                <button class="btn-text btn-logout-main" id="btn-logout-profile">Sair</button>
+            </div>
+            
+            <div class="recommendations-box" style="margin-top: 30px; text-align: left; width: 100%;">
+                <h4 style="font-size: 1rem; color: #555; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+                    <i class="fa-solid fa-users"></i> Sugestões para você
+                </h4>
+                <div id="lista-recomendacoes">
+                    <p style="font-size: 0.8rem; color: #999;">Carregando...</p>
+                </div>
+            </div>
+        </aside>
+
+<section class="profile-content">
+            
+            <div class="content-header">
+                <h3>Minhas avaliações</h3>
+            </div>
+
+            <div class="reviews-list" id="lista-minhas-avaliacoes">
+                <p>Carregando...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="modal-edit-review" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Avaliação</h3>
+                <button id="btn-close-edit" class="btn-close">&times;</button>
+            </div>
+            <form id="form-edit-review">
+                <input type="hidden" id="edit-review-id">
+                
+                <div class="input-group">
+                    <label>Nota (1 a 5):</label>
+                    <input type="number" id="edit-nota" class="modal-input" min="1" max="5" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Comentário:</label>
+                    <textarea id="edit-comentario" class="modal-input" rows="3" required></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="btn-cancel-edit" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+        </section>
+    </main>
+    
+    <script src="_scripts\profile.js" defer></script>
+</body>
+</html>

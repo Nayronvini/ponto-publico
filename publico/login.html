@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Público - Acesso</title>
+
+    <link rel="shortcut icon" href="_imagens/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="_styles/style.css">
+    <link rel="stylesheet" href="_styles/login.css">
+</head>
+
+<body>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+
+            <div class="auth-header">
+                <div class="logo-icon">
+                    <img src="_imagens/logo.png" alt="Logo Ponto Público">
+                </div>
+                <h2>Ponto Público</h2>
+                <p>Acesse os locais públicos próximos de você</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tab-login">Entrar</button>
+                <button class="tab-btn" id="tab-register">Criar Conta</button>
+            </div>
+
+            <form id="form-login" class="auth-form active">
+                <div class="input-group">
+                    <label for="login-email">E-mail</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="login-email" class="modal-input" placeholder="seu@email.com" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="login-pass">Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="login-pass" class="modal-input" placeholder="Sua senha" required>
+                        <i class="fa-solid fa-eye show-pass" id="toggle-login-pass"></i>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <a href="#" class="forgot-pass">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" class="btn-primary btn-full">Acessar</button>
+            </form>
+
+            <form id="form-register" class="auth-form">
+                <div class="input-group">
+                    <label for="reg-name">Nome Completo</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="reg-name" class="modal-input" placeholder="Ex: João Silva" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-email">E-mail</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="reg-email" class="modal-input" placeholder="seu@email.com" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-pass">Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="reg-pass" class="modal-input" placeholder="Crie uma senha" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-confirm">Confirmar Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-check-double"></i>
+                        <input type="password" id="reg-confirm" class="modal-input" placeholder="Repita a senha" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-full">Cadastrar</button>
+            </form>
+
+        </div>
+
+        <div class="back-link">
+            <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Voltar para a Home</a>
+        </div>
+    </div>
+
+    <script src="_scripts/login.js"></script>
+</body>
+
+</html>

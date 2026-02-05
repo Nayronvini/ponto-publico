@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Público - Mapa View</title>
+
+    <!-- O favicon da página -->
+    <link rel="shortcut icon" href="_imagens/logo.png" type="image/x-icon">
+
+    <!-- Esse link puxa a fonte do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Outro cara de fonte -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Agora esse aqui é o Leaflet (vamos usá-lo junto do OpenStreetMap do Google) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- O css padrão baseado no modelo que fizemos no Figma -->
+    <link rel="stylesheet" href="_styles/style.css">
+</head>
+
+<body>
+
+    <!-- A parte do cabeçalho -->
+    <header>
+        <!-- Essa aqui é a logo toda (imagem e texto) para linkar com a home -->
+        <a href="#">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <img src="_imagens/logo.png">
+                </div>
+                <div class="logo-text">Ponto Público</div>
+            </div>
+        </a>
+
+        <!-- O menu que vamos usar mais tarde (coloquei para adiantar logo) -->
+        <nav>
+            <ul>
+                <li><a href="profile.html" id="btn-meu-perfil">Meu Perfil</a></li>
+                <li><a href="parceria.html">Solicitar Parceria</a></li>
+                <li><a href="services.html">Sugerir Serviço</a></li>
+                <li id="menu-login"><a href="login.html" style="font-weight: bold; color: #0d8632;">Entrar</a></li>
+                <li id="menu-logout" style="display: none;"><a href="#" id="btn-logout" style="color: red;">Sair</a></li> <!-- para funcionar o logout --> 
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Essa parte são as ferramentas do site (o adicionar ponto e etc) -->
+    <div class="toolbar">
+
+        <!-- Aqui fica o menu de opções (Não fiz funcionar) -->
+        <div class="toolbar-left">
+            <div class="options-wrapper">
+                <button class="btn-icon" id="btn-options">
+                    <i class="fa-solid fa-list"></i>
+                </button>
+
+                <!-- Aqui é a lista dos pontos (colocado pelo backend). -->
+                <div class="options-menu" id="options-menu">
+                    <ul>
+                        <!-- Cada item <li> vai ser puxado pelo banco -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aqui é o forms fluante que está oculto -->
+        <div id="modal-point" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Salvar Localização</h3>
+                    <button id="btn-close-modal" class="btn-close">&times;</button>
+                </div>
+
+                <form id="form-point">
+                    <div class="input-group">
+                        <label for="input-name">Nome do Local</label>
+                        <input type="text" id="input-name" class="search-input modal-input" placeholder="Ex: Praça Central">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="input-desc">Descrição / Serviços</label>
+                        <textarea id="input-desc" class="modal-input" rows="3" placeholder="Ex: Emissão de documentos, vacinação..."></textarea>
+                    </div>
+
+                    <div class="row-inputs">
+                        <div class="input-group">
+                            <label for="input-lat">Latitude</label>
+                            <input type="number" id="input-lat" class="search-input modal-input" step="any" placeholder="-0.0000">
+                        </div>
+                        <div class="input-group">
+                            <label for="input-lng">Longitude</label>
+                            <input type="number" id="input-lng" class="search-input modal-input" step="any" placeholder="-0.0000">
+                        </div>
+                    </div>
+
+                    <p class="instruction-text">
+                        <i class="fa-solid fa-location-dot"></i> Clique no mapa para capturar as coordenadas.
+                    </p>
+
+                    <div class="modal-actions">
+                        <button type="button" id="btn-cancel" class="btn-secondary">Cancelar</button>
+                        <button type="submit" id="btn-save" class="btn-primary">Salvar Ponto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Aqui é o botão de adicionar locais -->
+        <div class="toolbar-right">
+            <button class="btn-icon" id="point-add">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+
+            <!-- Aqui fica a barra de pesquisa (Não fiz funcionar) -->
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Pesquisar..." id="search">
+                <button class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Essa é a div do mapa (NÃO MEXA A MENOS QUE SEJA ABSOLUTEMENTE NECESSÁRIO) -->
+    <div class="map-wrapper">
+        <div id="map"></div>
+    </div>
+
+    <!-- Aqui chamamos a o Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Aqui é o script na pasta de _scripts -->
+    <script src="_scripts/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+/* --- Container Principal e Fundo --- */
+
+.partnership-container {
+    padding: 40px;
+    min-height: calc(100vh - 90px);
+    /* Altura total menos o header */
+    /* Gradiente sutil no fundo para simular o efeito da imagem */
+    background: radial-gradient(circle at top right, rgba(255, 248, 220, 0.6), transparent 40%), radial-gradient(circle at bottom right, rgba(255, 240, 245, 0.6), transparent 40%), radial-gradient(circle at bottom left, rgba(240, 255, 240, 0.6), transparent 40%);
+    background-color: #fff;
+}
+
+
+/* --- Cabeçalho do Conteúdo --- */
+
+.content-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.btn-back {
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-back:hover {
+    background-color: #e0e0e0;
+}
+
+.content-header h1 {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 2rem;
+    color: #000;
+    font-weight: 700;
+    margin: 0;
+    /* Ajuste para compensar a largura do botão e centralizar visualmente */
+    margin-left: -50px;
+}
+
+
+/* --- Formulário --- */
+
+.partnership-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+
+/* Grid de Duas Colunas */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 50px;
+    /* Espaçamento vertical e horizontal */
+    margin-bottom: 50px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+
+/* Estilo dos Inputs */
+
+.form-input {
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s;
+}
+
+.form-input:focus {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px #e0e0e0;
+}
+
+
+/* --- Botão de Solicitar --- */
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+}
+
+
+/* Botão Azul */
+
+.btn-submit {
+    background-color: #3A57E8;
+    /* Azul vibrante da imagem */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 50px;
+    /* Bordas bem arredondadas */
+    padding: 15px 60px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(58, 87, 232, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(58, 87, 232, 0.5);
+    background-color: #2f48c9;
+}
+
+
+/* --- Responsividade --- */
+
+@media (max-width: 768px) {
+    .partnership-container {
+        padding: 20px;
+    }
+    .content-header h1 {
+        font-size: 1.5rem;
+        margin-left: 15px;
+        text-align: left;
+    }
+    /* Empilha as colunas em telas menores */
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .btn-submit {
+        width: 100%;
+        padding: 15px;
+    }
+}

@@ -1,0 +1,200 @@
+/* Layout Principal */
+.profile-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    gap: 60px; /* Espaço entre a coluna da esquerda e a da direita */
+    min-height: 60vh;
+}
+
+/* --- Coluna da Esquerda (Sidebar) --- */
+.profile-sidebar {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Botão Voltar "Meu Perfil" */
+.back-btn-container {
+    width: 100%;
+    text-align: left; /* Alinhado à esquerda como na imagem */
+    margin-bottom: 20px;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Avatar Grande Circular */
+.profile-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 5px solid #000; /* Borda preta grossa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem; /* Tamanho do ícone */
+    margin-bottom: 20px;
+    background-color: #fff;
+    color: #000;
+}
+
+/* Nome do Usuário */
+.profile-name {
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 40px;
+    word-break: break-word;
+}
+
+/* Menu de Opções (Mudar Foto, Sair...) */
+.profile-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: #000;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.btn-text:hover {
+    text-decoration: underline;
+}
+
+.btn-logout-main {
+    margin-top: 10px;
+}
+
+/* --- Coluna da Direita (Conteúdo) --- */
+.profile-content {
+    flex-grow: 1; /* Ocupa o resto do espaço */
+    padding-top: 60px; /* Para alinhar visualmente com o layout */
+}
+
+.content-header {
+    display: flex;
+    justify-content: flex-end; /* Joga o título para a direita como na imagem */
+    margin-bottom: 20px;
+}
+
+.content-header h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    /* Se quiser simular a aba branca, pode adicionar background aqui, 
+       mas como removemos os "Vistos Recentemente", deixei limpo */
+}
+
+/* Lista de Reviews */
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* O CARD DE AVALIAÇÃO */
+.review-card {
+    border: 2px solid #000; /* A borda preta sólida da imagem */
+    border-radius: 8px;
+    padding: 15px 20px;
+    background-color: #f9f9f9;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reviewer-name {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.review-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.review-date {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Estrelas */
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.stars .yellow {
+    color: #e8d817; /* Amarelo */
+}
+
+.stars .gray {
+    color: #dcdcdc; /* Cinza */
+}
+
+/* Corpo do Card (Comentário) */
+.card-body {
+    margin-bottom: 15px;
+}
+
+.card-body p {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Rodapé do Card (Serviço alinhado à direita) */
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.service-tag {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Responsividade para celular */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+    
+    .profile-content {
+        padding-top: 0;
+        width: 100%;
+    }
+
+    .content-header {
+        justify-content: center;
+    }
+}
