@@ -53,12 +53,6 @@ const PontoPublicoController = {
         telefone
       } = req.body
 
-      if (!nome || !latitude || !longitude) {
-        return res.status(400).json({
-          error: "Nome, Latitude e Longitude são obrigatórios."
-        })
-      }
-
       const novoPonto = await PontoPublicoModel.create({
         nome,
         endereco,

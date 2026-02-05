@@ -1,11 +1,13 @@
 import { Router } from "express"
 import AvaliacaoController from "../controllers/AvaliacaoController"
 import { authMiddleware } from "../middlewares/authMiddleware"
+import validate from "../middlewares/validateResource"
+import { avaliacaoSchema } from "../validators/avaliacaoSchema"
 
 const router = Router()
 
 // POST: Criar avaliação (Só logado)
-router.post("/", authMiddleware, AvaliacaoController.criar)
+router.post("/", authMiddleware, validate(avaliacaoSchema), AvaliacaoController.criar)
 
 // GET: Listar avaliações de um ponto específico
 router.get("/:pontoId", AvaliacaoController.listarPorPonto)

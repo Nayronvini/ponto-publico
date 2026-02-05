@@ -8,10 +8,6 @@ const AvaliacaoController = {
       const { pontoId, nota, comentario } = req.body
       const userId = req.userId // Vem do token (authMiddleware)
 
-      if (!pontoId || !nota) {
-        return res.status(400).json({ error: "Ponto e Nota são obrigatórios" })
-      }
-
       const novaAvaliacao = await AvaliacaoModel.create({
         pontoId,
         userId,
