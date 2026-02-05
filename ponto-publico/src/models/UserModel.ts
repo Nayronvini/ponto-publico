@@ -17,7 +17,17 @@ const UserModel = {
   
   async update(id: string, dados: any) {
    return await UserMongooseModel.findByIdAndUpdate(id, dados, { new: true }).select("-senha_hash");
-}
+},
+async findAll() {
+    // Retorna todos os usuários, menos a senha
+    return await UserMongooseModel.find().select("-senha_hash").sort({ createdAt: -1 })
+  },
+
+  async delete(id: string) {
+    await UserMongooseModel.findByIdAndDelete(id)
+    return true
+  }
+
 }
 
 export default UserModel

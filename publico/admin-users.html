@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Público - Administração</title>
+    <link rel="shortcut icon" href="_imagens/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="_styles/style.css">
+    
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .user-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .user-row {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+        .user-row:hover { background-color: #f9f9f9; }
+        .user-row:last-child { border-bottom: none; }
+        
+        .col-avatar { width: 60px; }
+        .col-avatar img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .col-avatar .no-pic { width: 40px; height: 40px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
+
+        .col-info { flex: 1; }
+        .col-info h4 { margin: 0; color: #333; font-size: 1rem; }
+        .col-info span { font-size: 0.85rem; color: #777; }
+
+        .col-date { width: 150px; text-align: right; color: #999; font-size: 0.85rem; padding-right: 20px; }
+        
+        .col-actions { display: flex; gap: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html">
+            <div class="logo-container">
+                <div class="logo-icon"><img src="_imagens/logo.png"></div>
+                <div class="logo-text">Ponto Público</div>
+            </div>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="profile.html" style="font-weight: bold;">Voltar ao Perfil</a></li>
+                <li><a href="#" id="btn-logout-nav" style="color: red;">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h2>Administrar Usuários</h2>
+            <div class="search-bar-large" style="max-width: 300px;">
+                <input type="text" id="search-user" placeholder="Buscar usuário...">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+        </div>
+
+        <div class="user-list" id="user-list-container">
+            <p style="padding: 20px; text-align: center;">Carregando usuários...</p>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarUsuarios();
+
+            // Busca (Filtro)
+            document.getElementById('search-user').addEventListener('input', (e) => {
+                const termo = e.target.value.toLowerCase();
+                const linhas = document.querySelectorAll('.user-row');
+                
+                linhas.forEach(linha => {
+                    const nome = linha.querySelector('h4').textContent.toLowerCase();
+                    const email = linha.querySelector('span').textContent.toLowerCase();
+                    if(nome.includes(termo) || email.includes(termo)) {
+                        linha.style.display = 'flex';
+                    } else {
+                        linha.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Logout
+            document.getElementById('btn-logout-nav').addEventListener('click', () => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            });
+        });
+
+        async function carregarUsuarios() {
+            const container = document.getElementById('user-list-container');
+            const token = localStorage.getItem('token');
+            const myUser = JSON.parse(localStorage.getItem('user'));
+
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/users', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const usuarios = await response.json();
+
+                container.innerHTML = '';
+
+                usuarios.forEach(u => {
+                    // Impede de excluir a si mesmo visualmente, ou destaca
+                    const isMe = myUser && myUser.id === u._id;
+                    const dataCriacao = new Date(u.createdAt).toLocaleDateString('pt-BR');
+
+                    const div = document.createElement('div');
+                    div.className = 'user-row';
+                    div.innerHTML = `
+                        <div class="col-avatar">
+                            ${u.foto 
+                                ? `<img src="${u.foto}">` 
+                                : `<div class="no-pic"><i class="fa-solid fa-user"></i></div>`
+                            }
+                        </div>
+                        <div class="col-info">
+                            <h4>${u.nome} ${isMe ? '(Você)' : ''}</h4>
+                            <span>${u.email}</span>
+                        </div>
+                        <div class="col-date">
+                            Desde: ${dataCriacao}
+                        </div>
+                        <div class="col-actions">
+                            <button class="btn-icon" style="color: blue;" onclick="editarUsuario('${u._id}', '${u.nome}')" title="Editar Nome">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            ${!isMe ? `
+                            <button class="btn-icon" style="color: red;" onclick="deletarUsuario('${u._id}')" title="Excluir Usuário">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p style="padding:20px; color:red">Erro ao carregar usuários.</p>';
+            }
+        }
+
+        // Tornar funções globais para o onclick funcionar
+        window.deletarUsuario = async (id) => {
+            if(confirm("ATENÇÃO: Isso excluirá o usuário e todas as avaliações dele. Tem certeza?")) {
+                const token = localStorage.getItem('token');
+                try {
+                    const res = await fetch(`http://localhost:3000/api/auth/users/${id}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if(res.ok) {
+                        alert("Usuário removido.");
+                        carregarUsuarios();
+                    } else {
+                        alert("Erro ao remover.");
+                    }
+                } catch(e) { console.error(e); }
+            }
+        }
+
+        window.editarUsuario = async (id, nomeAtual) => {
+            const novoNome = prompt("Novo nome para o usuário:", nomeAtual);
+            if(novoNome && novoNome !== nomeAtual) {
+                const token = localStorage.getItem('token');
+                try {
+                    const res = await fetch(`http://localhost:3000/api/auth/users/${id}`, {
+                        method: 'PUT',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` 
+                        },
+                        body: JSON.stringify({ nome: novoNome })
+                    });
+                    if(res.ok) {
+                        alert("Nome atualizado.");
+                        carregarUsuarios();
+                    } else {
+                        alert("Erro ao atualizar.");
+                    }
+                } catch(e) { console.error(e); }
+            }
+        }
+    </script>
+</body>
+</html>

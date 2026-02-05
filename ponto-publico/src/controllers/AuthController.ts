@@ -101,6 +101,38 @@ const AuthController = {
     } catch (error: any) {
       return res.status(500).json({ error: error.message })
     }
+  },
+
+  async listarTodos(req: Request, res: Response) {
+    try {
+      const usuarios = await UserModel.findAll()
+      return res.json(usuarios)
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message })
+    }
+  },
+
+  async deletarUsuario(req: Request, res: Response) {
+    try {
+        const id = req.params.id as string
+        await UserModel.delete(id);
+        return res.status(204).send();
+    } catch (error: any) {
+        return res.status(500).json({ error: error.message });
+    }
+  },
+  
+  // Edição administrativa (ex: corrigir um nome impróprio)
+  async editarUsuarioAdmin(req: Request, res: Response) {
+      try {
+          const id = req.params.id as string // ID vem da URL
+          const { nome } = req.body; // Admin só muda o nome por enquanto
+          
+          const atualizado = await UserModel.update(id, { nome });
+          return res.json(atualizado);
+      } catch (error: any) {
+          return res.status(500).json({ error: error.message });
+      }
   }
 }
 
