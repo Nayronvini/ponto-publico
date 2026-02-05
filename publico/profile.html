@@ -51,8 +51,10 @@
             <h2 class="profile-name" id="display-name">Alberto.Grangeiro</h2>
 
             <div class="profile-options">
-                <button class="btn-text">Mudar Foto</button>
-                <button class="btn-text">Mudar Nome</button>
+                <button class="btn-text" id="btn-mudar-foto">Mudar Foto</button>
+                <button class="btn-text" id="btn-mudar-nome">Mudar Nome</button>
+
+                <input type="file" id="input-foto-arquivo" accept="image/*" style="display: none;">
                 
                 <button class="btn-text btn-logout-main" id="btn-logout-profile">Sair</button>
             </div>
@@ -121,5 +123,7 @@
             </div>
         </section>
     </main>
+    
+    <script src="_scripts\profile.js" defer></script>
 </body>
 </html>

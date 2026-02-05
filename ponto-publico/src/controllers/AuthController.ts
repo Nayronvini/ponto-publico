@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import UserModel from "../models/UserModel"
+interface AuthRequest extends Request { userId?: string }
 
 const AuthController = {
   async registrar(req: Request, res: Response) {
@@ -75,7 +76,32 @@ const AuthController = {
     } catch (error: any) {
       return res.status(500).json({ error: error.message })
     }
+  },
+  // --- MÉTODO DE ATUALIZAR ---
+  async atualizarPerfil(req: AuthRequest, res: Response) {
+    try {
+      const { nome, foto } = req.body
+      const userId = req.userId // Vem do authMiddleware
+
+      // Procura e atualiza (retornando o novo dado)
+      const usuarioAtualizado = await UserModel.update(userId!, { nome, foto })
+
+      if (!usuarioAtualizado) {
+        return res.status(404).json({ error: "Usuário não encontrado" })
+      }
+
+      return res.json({
+        id: usuarioAtualizado._id,
+        nome: usuarioAtualizado.nome,
+        email: usuarioAtualizado.email,
+        foto: usuarioAtualizado.foto
+      })
+
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message })
+    }
   }
 }
+
 
 export default AuthController

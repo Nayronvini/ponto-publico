@@ -13,7 +13,11 @@ const UserModel = {
 
   async findById(id: string) {
     return await UserMongooseModel.findById(id).select("-senha_hash") // Nunca retorna o hash da senha
-  }
+  },
+  
+  async update(id: string, dados: any) {
+   return await UserMongooseModel.findByIdAndUpdate(id, dados, { new: true }).select("-senha_hash");
+}
 }
 
 export default UserModel
