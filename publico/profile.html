@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Público - Meu Perfil</title>
+
+    <link rel="shortcut icon" href="_imagens/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="_styles/style.css">
+    <link rel="stylesheet" href="_styles/profile.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <img src="_imagens/logo.png" alt="Logo">
+                </div>
+                <div class="logo-text">Ponto Público</div>
+            </div>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="profile.html" style="font-weight: bold;">Meu Perfil</a></li>
+                <li><a href="parceria.html">Solicitar Parceria</a></li>
+                <li><a href="services.html">Sugerir Serviço</a></li>
+                <li><a href="#" id="btn-logout-nav">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="profile-container">
+        
+        <aside class="profile-sidebar">
+            <div class="back-btn-container">
+                <a href="index.html" class="back-link">
+                    <i class="fa-solid fa-arrow-left"></i> Meu Perfil
+                </a>
+            </div>
+
+            <div class="profile-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <h2 class="profile-name" id="display-name">Alberto.Grangeiro</h2>
+
+            <div class="profile-options">
+                <button class="btn-text">Mudar Foto</button>
+                <button class="btn-text">Mudar Nome</button>
+                
+                <button class="btn-text btn-logout-main" id="btn-logout-profile">Sair</button>
+            </div>
+        </aside>
+
+        <section class="profile-content">
+            
+            <div class="content-header">
+                <h3>Minhas avaliações</h3>
+            </div>
+
+            <div class="reviews-list">
+
+                <div class="review-card">
+                    <div class="card-header">
+                        <span class="reviewer-name">
+                            <i class="fa-solid fa-circle-user"></i> Alberto.Grangeiro
+                        </span>
+                        <div class="review-meta">
+                            <span class="review-date">2 ano atrás</span>
+                            <div class="stars">
+                                <i class="fa-solid fa-star yellow"></i>
+                                <i class="fa-solid fa-star gray"></i>
+                                <i class="fa-solid fa-star gray"></i>
+                                <i class="fa-solid fa-star gray"></i>
+                                <i class="fa-solid fa-star gray"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p>Caro</p>
+                    </div>
+
+                    <div class="card-footer">
+                        <span class="service-tag">Emissão de RG</span>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="card-header">
+                        <span class="reviewer-name">
+                            <i class="fa-solid fa-circle-user"></i> Alberto.Grangeiro
+                        </span>
+                        <div class="review-meta">
+                            <span class="review-date">1 mês atrás</span>
+                            <div class="stars">
+                                <i class="fa-solid fa-star yellow"></i>
+                                <i class="fa-solid fa-star yellow"></i>
+                                <i class="fa-solid fa-star yellow"></i>
+                                <i class="fa-solid fa-star yellow"></i>
+                                <i class="fa-solid fa-star yellow"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p>Atendimento rápido e eficiente.</p>
+                    </div>
+
+                    <div class="card-footer">
+                        <span class="service-tag">Posto de Saúde</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+</body>
+</html>
