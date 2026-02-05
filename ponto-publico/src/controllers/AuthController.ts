@@ -69,7 +69,8 @@ const AuthController = {
         user: {
           id: usuario._id,
           nome: usuario.nome,
-          email: usuario.email
+          email: usuario.email,
+          foto: usuario.foto
         }
       })
 
