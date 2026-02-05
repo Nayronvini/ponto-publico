@@ -365,20 +365,39 @@ carregarPontos();
 
 async function deletarPonto(id) {
     if (confirm("Tem certeza que deseja excluir este ponto?")) {
+        
+        // 1. Pega o token salvo no navegador
+        const token = localStorage.getItem('token');
+
+        // Se não tiver token, nem tenta enviar
+        if (!token) {
+            alert("Você precisa estar logado para excluir pontos.");
+            return;
+        }
+
         try {
-            const response = await fetch(`${API_URL}/${id}`, {
-                method: 'DELETE'
+            // 2. Adiciona o cabeçalho Authorization
+            const response = await fetch(`http://localhost:3000/api/pontos/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}` // <--- O PULO DO GATO ESTÁ AQUI
+                }
             });
 
             if (response.ok) {
-                alert("Ponto excluído!");
-                carregarPontos(); // Atualiza a tela
+                alert("Ponto excluído com sucesso!");
+                carregarPontos(); // Atualiza a lista e o mapa
             } else {
-                alert("Erro ao excluir.");
+                // Tratamento de erros comuns
+                if (response.status === 401 || response.status === 403) {
+                    alert("Erro: Você não tem permissão para excluir (Sessão inválida).");
+                } else {
+                    alert("Erro ao excluir. O servidor respondeu com erro.");
+                }
             }
         } catch (error) {
             console.error(error);
-            alert("Erro de conexão.");
+            alert("Erro de conexão com o servidor.");
         }
     }
 }
