@@ -38,7 +38,7 @@ if (togglePass) {
     });
 }
 
-// Simulação de envio do Login
+// envio do Login
 formLogin.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
@@ -70,7 +70,7 @@ try {
     }
 });
 
-// Simulação de envio do Cadastro
+// envio do Cadastro
 formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
 
