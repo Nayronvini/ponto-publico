@@ -270,3 +270,18 @@
 .btn-avaliar:hover {
     background-color: #d35400;
 }
+
+.btn-seguir-sm {
+    background: none;
+    border: none;
+    color: #3A57E8;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-left: 5px;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+.btn-seguir-sm:hover {
+    transform: scale(1.2);
+    color: #2f48c9;
+}

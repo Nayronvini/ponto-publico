@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import UserModel from "../models/UserModel"
+import { getNeoSession } from "../config/neo4j" // Importe a conexão
 
 interface AuthRequest extends Request { userId?: string }
 
@@ -20,6 +21,21 @@ const AuthController = {
       const senha_hash = await bcrypt.hash(senha, salt)
 
       const novoUsuario = await UserModel.create({ nome, email, senha_hash })
+
+      const session = getNeoSession()
+      try {
+        await session.run(
+          `CREATE (u:User { mongoId: $mongoId, nome: $nome })`,
+          { 
+            mongoId: novoUsuario._id.toString(), 
+            nome: novoUsuario.nome 
+          }
+        )
+      } catch (neoError) {
+        console.error("Erro ao sincronizar Neo4j:", neoError)
+      } finally {
+        await session.close()
+      }
 
       return res.status(201).json({
         id: novoUsuario._id,

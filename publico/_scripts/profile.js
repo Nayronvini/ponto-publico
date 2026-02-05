@@ -299,4 +299,63 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    // --- CARREGAR RECOMENDAÇÕES (NEO4J) ---
+    carregarRecomendacoes();
+
+    async function carregarRecomendacoes() {
+        const container = document.getElementById('lista-recomendacoes');
+        const token = localStorage.getItem('token');
+        if(!token || !container) return;
+
+        try {
+            const response = await fetch('http://localhost:3000/api/social/recomendacoes', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (!response.ok) throw new Error("Falha ao buscar recomendações");
+
+            const lista = await response.json();
+            container.innerHTML = '';
+
+            if (lista.length === 0) {
+                container.innerHTML = '<p style="font-size: 0.8rem; color: #ccc;">Nenhuma sugestão no momento.</p>';
+                return;
+            }
+
+            lista.forEach(user => {
+                const item = document.createElement('div');
+                item.style.cssText = "display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;";
+                
+                item.innerHTML = `
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-weight: 500; font-size: 0.9rem;">${user.nome}</span>
+                        <span style="font-size: 0.7rem; color: #888;">${user.motivo}</span>
+                    </div>
+                    <button onclick="seguirUsuarioProfile('${user.id}')" style="border: none; background: #e8f0fe; color: #1a73e8; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 0.8rem;">
+                        Seguir
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+
+        } catch (error) {
+            console.error(error);
+            container.innerHTML = '<p style="font-size: 0.8rem; color: #ccc;">Indisponível.</p>';
+        }
+    }
+
+    // Função global para o botão de seguir dentro do perfil
+    window.seguirUsuarioProfile = async (targetId) => {
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch(`http://localhost:3000/api/social/seguir/${targetId}`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if(res.ok) {
+                alert("Você começou a seguir este usuário!");
+                carregarRecomendacoes(); // Recarrega a lista para ele sumir das sugestões
+            }
+        } catch(e) { console.error(e); }
+    };
     });
