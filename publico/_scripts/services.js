@@ -40,6 +40,9 @@ function renderizarListaServicos(pontos) {
         const item = document.createElement('div');
         item.className = 'service-item';
 
+        // Verifica se tem coordenadas válidas
+        const temLocalizacao = ponto.latitude && ponto.longitude;
+
         item.innerHTML = `
             <div class="item-summary" onclick="toggleDetails(this)">
                 <div class="col-service">
@@ -52,13 +55,25 @@ function renderizarListaServicos(pontos) {
                 </div>
             </div>
             <div class="item-details">
-                <p>${ponto.descricao || 'Sem descrição.'}</p>
+                <p><strong>Descrição:</strong> ${ponto.descricao || 'Sem descrição.'}</p>
                 <p><strong>Horário:</strong> ${ponto.horario_funcionamento || 'Não informado'}</p>
                 <p><strong>Telefone:</strong> ${ponto.telefone || 'Não informado'}</p>
+                
+                ${temLocalizacao ? `
+                    <button class="btn-ver-mapa" onclick="irParaMapa(${ponto.latitude}, ${ponto.longitude})">
+                        <i class="fa-solid fa-map-location-dot"></i> Ver no Mapa
+                    </button>
+                ` : ''}
             </div>
         `;
         container.appendChild(item);
     });
+}
+
+// Função que faz o redirecionamento
+function irParaMapa(lat, lng) {
+    // Redireciona para o index passando as coordenadas na URL
+    window.location.href = `index.html?lat=${lat}&lng=${lng}&zoom=18`;
 }
 
 // ----------------- Carregar serviços do backend -----------------

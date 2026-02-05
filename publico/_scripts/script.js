@@ -119,13 +119,14 @@ function prepararEdicao(ponto) {
     inputName.value = ponto.nome;
     inputLat.value = ponto.latitude;
     inputLng.value = ponto.longitude;
+    document.getElementById('input-desc').value = ponto.descricao || '';
     
     // Se tiver inputs para endereço/descrição, preencha aqui também
     
     openModal(true); // Abre o modal em modo edição
 }
 
-// Atualize sua função openModal existente
+// Atualiza sua função openModal existente
 function openModal(editMode = false) {
     modalPoint.classList.remove('hidden');
     
@@ -133,6 +134,7 @@ function openModal(editMode = false) {
         // Se for criar novo, limpa tudo
         idPontoEdicao = null; // IMPORTANTE: Reseta o ID
         inputName.value = '';
+        inputDesc.value = '';
         inputLat.value = '';
         inputLng.value = '';
         
@@ -201,8 +203,9 @@ document.getElementById('form-point').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Recupera o token do localStorage
-
     const token = localStorage.getItem('token');
+
+    const descValue = document.getElementById('input-desc').value;
 
     // Verificação de segurança no front
 
@@ -216,52 +219,39 @@ document.getElementById('form-point').addEventListener('submit', async (e) => {
         nome: inputName.value,
         latitude: parseFloat(inputLat.value),
         longitude: parseFloat(inputLng.value),
+        descricao: descValue,
         // Adicionar outros campos de inputs no HTML, (ESSES SÂO PARA TESTES)
         endereco: "Endereço via Web", 
-        descricao: "Criado pelo Front",
         horario_funcionamento: "Comercial",
         telefone: "0000-0000"
     };
 
+    const method = idPontoEdicao ? 'PUT' : 'POST';
+    const url = idPontoEdicao ? `${API_URL}/${idPontoEdicao}` : API_URL;
+
     try {
-        let response;
-        
-        if (idPontoEdicao) {
-            // --- MODO EDIÇÃO (PUT) ---
-            response = await fetch(`${API_URL}/${idPontoEdicao}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, // <--- ADICIONADO AQUI
-                body: JSON.stringify(dados)
-            });
-        } else {
-            // --- MODO CRIAÇÃO (POST) ---
-            response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, // <--- ADICIONADO AQUI
-                body: JSON.stringify(dados)
-            });
-        }
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(dados)
+        });
 
         if (response.ok) {
-            alert("Salvo com sucesso!");
+            alert(`Ponto ${idPontoEdicao ? 'editado' : 'salvo'} com sucesso!`);
             closeModal();
-            carregarPontos(); // Recarrega a lista e o mapa
+            carregarPontos(); // Atualiza o mapa
         } else {
-            // Se o token expirou ou é inválido, o backend retorna 401
-            if (response.status === 401) {
-                alert("Sua sessão expirou. Faça login novamente.");
-                window.location.href = "login.html";
-            } else {
-                const erro = await response.json();
-                alert("Erro ao salvar: " + JSON.stringify(erro));
-            }
+            alert("Erro ao salvar ponto.");
         }
-
     } catch (error) {
-        console.error("Erro na requisição:", error);
-        alert("Erro de conexão com o servidor.");
+        console.error("Erro:", error);
+        alert("Erro de conexão.");
     }
 });
+
     closeModal();
     // Aqui para baixo é a lógica para enviar ao Back-end ou criar o ponto definitivo no mapa
 
@@ -354,6 +344,8 @@ async function carregarPontos() {
 
         renderizarListaFiltrada(todosPontos);
         atualizarMarcadores(todosPontos);
+
+        verificarParametrosURL(); // <--- tentativa para funcionar integração lista mapa
 
     } catch (error) {
         console.error("Erro ao carregar pontos:", error);
@@ -469,4 +461,37 @@ if (btnMeuPerfil) {
         }
         // Se tiver token, o código não faz nada e o link funciona normalmente (vai para profile.html)
     });
+}
+
+// --- LÓGICA DE URL ---
+// Verifica se a URL tem ?lat=...&lng=...
+function verificarParametrosURL() {
+    const params = new URLSearchParams(window.location.search);
+    const latParam = params.get('lat');
+    const lngParam = params.get('lng');
+    const zoomParam = params.get('zoom') || 16;
+
+    if (latParam && lngParam) {
+        // Espera um pouco para garantir que o mapa carregou
+        setTimeout(() => {
+            // Voa para o local
+            map.flyTo([latParam, lngParam], zoomParam, {
+                animate: true,
+                duration: 1.5
+            });
+
+            // Procura nos marcadores que já carregamos
+            const markerEncontrado = marcadoresMap.find(m => {
+                const mLat = m.getLatLng().lat.toFixed(5);
+                const mLng = m.getLatLng().lng.toFixed(5);
+                // Compara com uma pequena margem de erro ou arredondamento
+                return Math.abs(mLat - parseFloat(latParam).toFixed(5)) < 0.0001 &&
+                       Math.abs(mLng - parseFloat(lngParam).toFixed(5)) < 0.0001;
+            });
+
+            if (markerEncontrado) {
+                markerEncontrado.openPopup();
+            }
+        }, 500); // Delay de meio segundo
+    }
 }
