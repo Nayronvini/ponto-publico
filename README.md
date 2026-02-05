@@ -30,7 +30,7 @@ Clone o repositório e instale as dependências:
 ```bash
 npm install
 
-Crie um arquivo .env na raiz do projeto e preencha com suas credenciais
+Crie um arquivo .env na raiz do projeto com base no .env.exemple e preencha com suas credenciais
 EX:
 
 # Servidor
@@ -50,6 +50,16 @@ NEO4J_PASSWORD=sua_senha_neo4j
 Para iniciar o servidor em modo de desenvolvimento:
 cd ponto-publico
 npm run dev
+
+### Acessando o Front-end
+O front-end está localizado em:
+
+/publico
+
+Para abrir a aplicação:
+- Abra o arquivo `index.html` diretamente no navegador  
+  **ou**
+- Utilize a extensão **Live Server** no VS Code para melhor experiência
 
 Estrutura do Projeto
 
