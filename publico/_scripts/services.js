@@ -1,17 +1,88 @@
-function toggleDetails(element) {
-    // Sobe para o elemento pai (.service-item)
-    const item = element.parentElement;
+/* ----------------- Lista de Serviços Dinâmica ----------------- */
 
-    // Toggle da classe 'active'
+// Container da lista
+const container = document.getElementById('services-list');
+
+// Campo de pesquisa da lista
+const searchInput = document.querySelector('.search-bar-large input');
+
+// Array para guardar todos os pontos do backend
+let todosPontos = [];
+
+// ----------------- Função para renderizar estrelas -----------------
+function renderStars(media) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        html += `<i class="fa-solid fa-star ${i <= media ? 'yellow' : 'gray'}"></i>`;
+    }
+    return html;
+}
+
+// ----------------- Toggle detalhes -----------------
+function toggleDetails(element) {
+    const item = element.parentElement;
     item.classList.toggle('active');
 
+    // Fechar outros itens
     const allItems = document.querySelectorAll('.service-item');
-    allItems.forEach(otherItem => {
-        if (otherItem !== item) {
-            otherItem.classList.remove('active');
+    allItems.forEach(other => {
+        if (other !== item) {
+            other.classList.remove('active');
         }
     });
 }
+
+// ----------------- Renderizar lista -----------------
+function renderizarListaServicos(pontos) {
+    container.innerHTML = ''; // limpa lista
+
+    pontos.forEach(ponto => {
+        const item = document.createElement('div');
+        item.className = 'service-item';
+
+        item.innerHTML = `
+            <div class="item-summary" onclick="toggleDetails(this)">
+                <div class="col-service">
+                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                    <span>${ponto.nome}</span>
+                </div>
+                <div class="col-local">${ponto.endereco || 'Não informado'}</div>
+                <div class="col-rating stars">
+                    ${renderStars(ponto.media_avaliacao || 0)}
+                </div>
+            </div>
+            <div class="item-details">
+                <p>${ponto.descricao || 'Sem descrição.'}</p>
+                <p><strong>Horário:</strong> ${ponto.horario_funcionamento || 'Não informado'}</p>
+                <p><strong>Telefone:</strong> ${ponto.telefone || 'Não informado'}</p>
+            </div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+// ----------------- Carregar serviços do backend -----------------
+async function carregarLista() {
+    try {
+        const response = await fetch('http://localhost:3000/api/pontos'); // ajuste conforme sua rota
+        todosPontos = await response.json();
+
+        renderizarListaServicos(todosPontos); // exibe todos inicialmente
+    } catch (error) {
+        console.error('Erro ao carregar serviços:', error);
+        container.innerHTML = `<p style="color:red;">Erro ao carregar serviços.</p>`;
+    }
+}
+
+// ----------------- Filtro de pesquisa -----------------
+searchInput.addEventListener('input', () => {
+    const texto = searchInput.value.toLowerCase();
+    const filtrados = todosPontos.filter(p => p.nome.toLowerCase().includes(texto));
+    renderizarListaServicos(filtrados);
+});
+
+// ----------------- Inicialização -----------------
+document.addEventListener('DOMContentLoaded', carregarLista);
 
 // Lógica para saber qual botão mostrar (ENTRAR OU SAIR)
 function verificarEstadoLogin() {
